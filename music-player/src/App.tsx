@@ -1,3 +1,4 @@
+import Artist from "./components/Artist"
 import Banner from "./components/Banner"
 import NavBar from "./components/NavBar"
 import SideBar from "./components/SideBar"
@@ -19,6 +20,10 @@ function App() {
 
       <div>
         <Banner />
+      </div>
+
+      <div>
+        <Artist />
       </div>
       </div>
 

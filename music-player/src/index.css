@@ -1,10 +1,22 @@
 @font-face {
-    font-family: CalSans;
-    src: url(../src/assets/fonts/CalSans-Regular.ttf);
+  font-family: CalSans;
+  src: url(../src/assets/fonts/CalSans-Regular.ttf);
+}
+
+@font-face {
+  font-family: Oswald-ExtraLight;
+  src: url(../src/assets/fonts/Oswald-ExtraLight.ttf);
+}
+
+@font-face {
+  font-family: Montserrat-Light;
+  src: url(../src/assets/fonts/Montserrat-Light.ttf);
 }
 
 @import "tailwindcss";
 
 @theme {
-    --font-calsans: CalSans, sans-serif;
+  --font-calsans: CalSans, sans-serif;
+  --font-oswald: Oswald-ExtraLight, sans-serif;
+  --font-montserrat: Montserrat-Light, sans-serif;
 }
