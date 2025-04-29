@@ -2,6 +2,7 @@ import Artist from "./components/Artist"
 import Banner from "./components/Banner"
 import NavBar from "./components/NavBar"
 import SideBar from "./components/SideBar"
+import SongPreview from "./components/SongPreview"
 
 function App() {
 
@@ -11,7 +12,7 @@ function App() {
       <SideBar />
       </div>
 
-      <div className="absolute top-0 left-[260px] w-[calc(100%-260px)] h-full bg-white rounded-l-4xl z-10">
+      <div className="fixed top-0 left-[260px] w-[calc(100%-260px)] h-full bg-white rounded-l-4xl z-10">
       
       {/* NavBar */}
       <div className="flex-1 z-10">
@@ -20,6 +21,10 @@ function App() {
 
       <div>
         <Banner />
+      </div>
+
+      <div>
+        <SongPreview />
       </div>
 
       <div>

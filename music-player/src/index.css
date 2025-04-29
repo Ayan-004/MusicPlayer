@@ -13,10 +13,26 @@
   src: url(../src/assets/fonts/Montserrat-Light.ttf);
 }
 
+@font-face {
+  font-family: Montserrat-Medium;
+  src: url(../src/assets/fonts/Montserrat-Medium.ttf);
+}
+
 @import "tailwindcss";
 
 @theme {
   --font-calsans: CalSans, sans-serif;
   --font-oswald: Oswald-ExtraLight, sans-serif;
   --font-montserrat: Montserrat-Light, sans-serif;
+  --font-montserrat-medium: Montserrat-Medium, sans-serif;
+}
+
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.custom-scrollbar{
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

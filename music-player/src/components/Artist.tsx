@@ -1,53 +1,89 @@
-import { useEffect, useState } from "react";
-
-interface Image {
-    ['#text']: string;
-    size: string;
-}
+import { useEffect, useState, useRef } from "react";
+import { ChevronLeft, ChevronRight } from "react-feather";
 
 interface ArtistProps {
     name: string;
-    image: Image[];
+    image: string;
 }
 
 function Artist() {
-    const [artists, setArtist] = useState<ArtistProps[]>([]);
+    const [artists, setArtists] = useState<ArtistProps[]>([]);
+    const scrollRef = useRef<HTMLDivElement>(null);
 
-    const getValidImage = (images: Image[]) => {
-        const image = images.find((img) => img['#text'].trim() !== '');
-        return image ? image['#text'] : '/fallback.jpg'; // Fallback image if none found
+    const scrollLeft = () => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({
+                left: -300,
+                behavior: "smooth",
+            });
+        }
+    };
+
+    const scrollRight = () => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({
+                left: 300,
+                behavior: "smooth",
+            });
+        }
     }
 
     useEffect(() => {
-        fetch("https://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=029f1ee4792d347d613adcabd9b949d8&format=json")
+        fetch("https://saavn.dev/api/search/artists?query=topartist")
             .then(res => res.json())
             .then(data => {
-                console.log(data);
-                setArtist(data?.topartists?.artist || []);
+                const results = data?.data?.results || [];
+
+                const artistsData = results.map((artist: any) => ({
+                    name: artist.name,
+                    image: artist.image?.[1]?.url || "",
+                }))
+                setArtists(artistsData);
             })
             .catch((error) => console.error("Error fetching data:", error));
     }, []);
 
     return (
-        <div className="grid grid-col-2 sm:grid-col-3 md:grid-col-4 gap-6 p-6">
+        <div className="relative">
+            {/* LeftScroll buttons */}
+            <button
+                onClick={scrollLeft}
+                className="absolute top-36 left-3 transform -translate-y-1/2 backdrop-blur-lg rounded-full p-2 hover:shadow-lg transition-all cursor-pointer z-10">
+                    <ChevronLeft />
+            </button>
+
+            <h2 className="font-calsans ml-12 text-3xl">Top Artist</h2>
+
+        <div 
+        ref={scrollRef}
+        className="custom-scrollbar whitespace-nowrap flex overflow-x-auto gap-3 p-4 pl-12 pr-12">
             {artists.map((artist, index) => (
                 <div
                     key={index}
-                    className="bg-white rounded-3xl shadow-lg p-4 flex flex-col items-center"    
+                    className="min-w-[150px] rounded-2xl p-3 flex-shrink-0 flex flex-col items-center" 
                 >
 
                     <img 
-                        src={getValidImage(artist.image)}
+                        src={artist.image}
                         alt={artist.name} 
-                        className="w-32 h-32 object-cover rounded-xl mx-auto mb-3"/>
+                        className="w-40 h-40 object-cover rounded-full mx-auto mb-3 shadow-lg shadow-gray-300 hover:cursor-pointer hover:mb-1 transition-all duration-300 ease-in-out"/>
 
-                    <h2 className="text-lg font-semibold text-center text-gray-800">{artist.name}</h2>
+                    <h2 className="text-lg font-montserrat-medium text-center text-gray-800">{artist.name}</h2>
                 </div>
             ))}
 
         </div>
+
+
+        {/* RightScroll buttons */}
+        <button
+            className="absolute top-36 right-3 transform -translate-y-1/2 backdrop-blur-lg rounded-full p-2 hover:shadow-lg cursor-pointer z-10"
+            onClick={scrollRight}>
+                <ChevronRight />
+        </button>
+        </div>
+
     );
 };
-
 
 export default Artist;
