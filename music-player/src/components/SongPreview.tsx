@@ -97,7 +97,7 @@ function SongPreview() {
 
 
     return (
-    <div className="song-item w-96 bg-gray-200 p-6 rounded-4xl">
+    <div className="song-item w-96 bg-[#efefef] p-6 rounded-4xl">
         <h2 className="text-2xl font-calsans mb-4">Top Tracks</h2>
 
         <Swiper
@@ -119,7 +119,10 @@ function SongPreview() {
                             <img src={items.artworkUrl100} alt={items.trackName}  
                             className="w-36 h-36 rounded-4xl "
                             />                      
-                            <p className="font-montserrat-medium text-xs pt-5">{items.trackName} - {items.artistName}</p>
+                            <p className="font-montserrat-medium text-xs pt-5">{items.trackName}</p>
+
+                            <p className="font-montserrat-medium text-xs text-[#979797] pt-1">{items.artistName}</p>
+
                             {items.previewUrl ? (
                                 <div className="relative">
                                 <audio 
@@ -130,7 +133,7 @@ function SongPreview() {
                                 </audio>
                                 <button
                                 onClick={handleMuteToggle}
-                                className="absolute top-2 -right-3 bg-gray-300 rounded-full p-2 text-xs hover:cursor-pointer"
+                                className="absolute top-3 -right-4 bg-[#cbcbcb] rounded-full p-2 text-xs hover:cursor-pointer"
                                 >
                                    <FontAwesomeIcon icon= {isMuted ? faVolumeMute : faVolumeHigh}/>
                                 </button>

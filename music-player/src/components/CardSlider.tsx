@@ -1,13 +1,18 @@
-import { useEffect, useState, useRef } from "react";
+import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
+import { Link } from "react-router-dom";
 
-interface ArtistProps {
+interface CardItem {
     name: string;
     image: string;
 }
 
-function Artist() {
-    const [artists, setArtists] = useState<ArtistProps[]>([]);
+interface CardSliderProps {
+    title: string;
+    items: CardItem[];
+}
+
+function CardSlider({ title, items }: CardSliderProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const scrollLeft = () => {
@@ -28,21 +33,6 @@ function Artist() {
         }
     }
 
-    useEffect(() => {
-        fetch("https://saavn.dev/api/search/artists?query=topartist")
-            .then(res => res.json())
-            .then(data => {
-                const results = data?.data?.results || [];
-
-                const artistsData = results.map((artist: any) => ({
-                    name: artist.name,
-                    image: artist.image?.[1]?.url || "",
-                }))
-                setArtists(artistsData);
-            })
-            .catch((error) => console.error("Error fetching data:", error));
-    }, []);
-
     return (
         <div className="relative">
             {/* LeftScroll buttons */}
@@ -52,23 +42,26 @@ function Artist() {
                     <ChevronLeft />
             </button>
 
-            <h2 className="font-calsans ml-12 text-3xl">Top Artist</h2>
+            <h2 className="font-calsans ml-12 text-3xl">{title}</h2>
 
         <div 
         ref={scrollRef}
         className="custom-scrollbar whitespace-nowrap flex overflow-x-auto gap-3 p-4 pl-12 pr-12">
-            {artists.map((artist, index) => (
+            {items.map((items: any, index: number) => (
                 <div
                     key={index}
                     className="min-w-[150px] rounded-2xl p-3 flex-shrink-0 flex flex-col items-center" 
                 >
-
+                    <Link key={index} to={`/artist/${items.name}`} className="block">
+                    <div className="card">
                     <img 
-                        src={artist.image}
-                        alt={artist.name} 
-                        className="w-40 h-40 object-cover rounded-full mx-auto mb-3 shadow-lg shadow-gray-300 hover:cursor-pointer hover:mb-1 transition-all duration-300 ease-in-out"/>
+                        src={items.image}
+                        alt={items.name} 
+                        className="w-40 h-40 object-cover rounded-full mx-auto mb-3 shadow-lg shadow-gray-300 hover:cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out"/>
 
-                    <h2 className="text-lg font-montserrat-medium text-center text-gray-800">{artist.name}</h2>
+                    <h2 className="text-lg font-montserrat-medium text-center text-black">{items.name}</h2>
+                    </div>
+                    </Link>
                 </div>
             ))}
 
@@ -86,4 +79,4 @@ function Artist() {
     );
 };
 
-export default Artist;
+export default CardSlider;
