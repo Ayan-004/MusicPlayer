@@ -8,11 +8,13 @@ interface CardItem {
 }
 
 interface CardSliderProps {
-    title: string;
-    items: CardItem[];
+    title?: string;
+    items?: any[];
+    artists?: any[];
+    loading?: boolean;
 }
 
-function CardSlider({ title, items }: CardSliderProps) {
+function CardSlider({ title, items = [], artists = [], loading=false }: CardSliderProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const scrollLeft = () => {
@@ -33,12 +35,31 @@ function CardSlider({ title, items }: CardSliderProps) {
         }
     }
 
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-60">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-4 border-black"></div>
+                <p className="ml-4 text-gray-600">Loading...</p>
+            </div>
+        );
+    }
+
+    if(!loading && artists.length === 0 && items.length === 0) {
+        return (
+            <div className="font-montserrat-medium text-center py-10 text-gray-500">
+                No data found. Please try again later.
+            </div>
+        )
+    }
+
+    
+
     return (
         <div className="relative">
             {/* LeftScroll buttons */}
             <button
                 onClick={scrollLeft}
-                className="absolute top-36 left-3 transform -translate-y-1/2 backdrop-blur-lg rounded-full p-2 hover:shadow-lg transition-all cursor-pointer z-10">
+                className="absolute top-44 left-3 transform -translate-y-1/2 backdrop-blur-lg rounded-full p-2 hover:shadow-lg transition-all cursor-pointer z-10">
                     <ChevronLeft />
             </button>
 
@@ -47,17 +68,17 @@ function CardSlider({ title, items }: CardSliderProps) {
         <div 
         ref={scrollRef}
         className="custom-scrollbar whitespace-nowrap flex overflow-x-auto gap-3 p-4 pl-12 pr-12">
-            {items.map((items: any, index: number) => (
+            {(artists.length > 0 ? artists : items).map((items: any, index: number) => (
                 <div
                     key={index}
                     className="min-w-[150px] rounded-2xl p-3 flex-shrink-0 flex flex-col items-center" 
                 >
-                    <Link key={index} to={`/artist/${items.name}`} className="block">
+                    <Link to={`/artist/${items.name}`} className="block">
                     <div className="card">
                     <img 
                         src={items.image}
                         alt={items.name} 
-                        className="w-40 h-40 object-cover rounded-full mx-auto mb-3 shadow-lg shadow-gray-300 hover:cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out"/>
+                        className="w-50 h-50 object-cover rounded-full mx-auto mb-3 shadow-lg shadow-gray-300 hover:cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out"/>
 
                     <h2 className="text-lg font-montserrat-medium text-center text-black">{items.name}</h2>
                     </div>
@@ -70,7 +91,7 @@ function CardSlider({ title, items }: CardSliderProps) {
 
         {/* RightScroll buttons */}
         <button
-            className="absolute top-36 right-3 transform -translate-y-1/2 backdrop-blur-lg rounded-full p-2 hover:shadow-lg cursor-pointer z-10"
+            className="absolute top-44 right-3 transform -translate-y-1/2 backdrop-blur-lg rounded-full p-2 hover:shadow-lg cursor-pointer z-10"
             onClick={scrollRight}>
                 <ChevronRight />
         </button>

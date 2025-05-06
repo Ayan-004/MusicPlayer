@@ -54,3 +54,10 @@
 .swiper-button-prev:after {
   color: #000000;
 }
+
+.fade-right {
+  -webkit-mask-image : linear-gradient(to left, transparent 5%, black 60%);
+  mask-image: linear-gradient(to left, transparent 5%, black 60%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat
+}

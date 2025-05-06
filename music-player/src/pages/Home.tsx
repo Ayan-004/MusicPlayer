@@ -2,16 +2,23 @@ import { useEffect, useState } from "react"
 import CardSlider from "../components/CardSlider"
 import Banner from "../components/Banner"
 import SongPreview from "../components/SongPreview"
-import NavBar from "../components/NavBar";
 
 function Home() {
 
   const [artists, setArtists] = useState([]);
   const [album, setAlbum] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
+
     fetch("https://saavn.dev/api/search/artists?query=topartist")
-        .then(res => res.json())
+        .then((res) => {
+          if(!res.ok) {
+            throw new Error("Failed to fetch artists");
+          }
+          return res.json();
+        })
         .then(data => {
             const results = data?.data?.results || [];
 
@@ -20,9 +27,16 @@ function Home() {
                 image: artist.image?.[2]?.url || "",
             }))
             setArtists(formatted);
-        })
-        .catch((error) => console.error("Error fetching data:", error));
-}, []);
+            setLoading(false);
+
+          })
+            .catch((error) => {
+              console.error("Error fetching data:", error);
+              setLoading(false);
+              setArtists([]);
+            })
+        }, []);
+        
 
 useEffect(() => {
   fetch("https://saavn.dev/api/search/albums?query=hindi+punjabi+albums")
@@ -52,7 +66,7 @@ return (
         </div>
         </div>
 
-        <CardSlider title="Top Artist" items={artists}/>
+        <CardSlider title="Top Artist" items={artists} loading={loading}/>
         <CardSlider title="Top Albums" items={album}/>
     </>
   );

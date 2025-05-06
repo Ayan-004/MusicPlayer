@@ -8,4 +8,16 @@ export default defineConfig({
     tailwindcss(),
     react()
   ],
+  server: {
+    host: true,
+    port: 5173,
+    proxy: {
+      '/api/rss': {
+        target: 'https://itunes.apple.com',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api\/rss/, '')
+
+      }
+    }
+  }
 })

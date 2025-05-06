@@ -18,22 +18,17 @@ function SongPreview() {
     useEffect(() => {
     const fetchTracks = async () => {
         try {
-            const response = await Promise.all(
-                artists.map(artist => 
-                    axios.get('https://thingproxy.freeboard.io/fetch/https://itunes.apple.com/search',{
-                        params: {
-                            term: artist,
-                            media: 'music',
-                            limit: 5,
-                            entity: 'song'
-                        }
-                    })
-                )
-            );
-
-            const combinedResults = response.flatMap(res => res.data.results)
-            setTrack(combinedResults);
-            console.log(combinedResults);
+            const response = await axios.get('/api/rss/in/rss/topsongs/limit=10/json')
+            const entries = response.data.feed.entry;
+            const parasedSongs = entries.map((entry: any) => ({
+                trackName: entry["im:name"]?.label || "Unknown Title",
+                artistName: entry["im:artist"]?.label || "Unknown artist",
+                artworkUrl100: entry["im:image"]?.[2].label || entry ["im:image"]?.[0]?.label || "",
+                previewUrl: entry.link?.find((link: any) => link?.attributes?.type === "audio/x-m4a")?.attributes?.href || "",
+            }));
+            setTrack(parasedSongs)
+            console.log(parasedSongs);
+            
         } catch (error) {
             console.error('Error fetching tracks',error);
         }
@@ -116,12 +111,14 @@ function SongPreview() {
                 {track.map((items, index) => (
                     <SwiperSlide key={index}>
                         <div className="flex flex-col items-center">      
-                            <img src={items.artworkUrl100} alt={items.trackName}  
+                            <img 
+                            src={items['im:image'][2].label} 
+                            alt={items['im:name'].label}  
                             className="w-36 h-36 rounded-4xl "
                             />                      
-                            <p className="font-montserrat-medium text-xs pt-5">{items.trackName}</p>
+                            <p className="font-montserrat-medium text-xs pt-5">{items['im:name'].label}</p>
 
-                            <p className="font-montserrat-medium text-xs text-[#979797] pt-1">{items.artistName}</p>
+                            <p className="font-montserrat-medium text-xs text-[#979797] pt-1">{items['im:artist'].label}</p>
 
                             {items.previewUrl ? (
                                 <div className="relative">

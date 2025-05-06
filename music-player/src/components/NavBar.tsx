@@ -9,6 +9,12 @@ function NavBar(){
                     <button className="text-gray-500 text-lg font-montserrat-medium py-2 px-4 rounded hover:text-black transition-all cursor-pointer duration-300 ease-in-out">Home</button>
                     <button className="text-gray-500 text-lg font-montserrat-medium py-2 px-4 rounded hover:text-black transition-all cursor-pointer duration-300 ease-in-out">Library</button>
                     <button className="text-gray-500 text-lg font-montserrat-medium py-2 px-4 rounded hover:text-black transition-all cursor-pointer duration-300 ease-in-out">Settings</button>
+
+                    
+                    <div className="flex items-end justify-end ml-auto space-x-4">
+                    <button className="bg-[#efefef] text-lg font-montserrat-medium py-2 px-4 rounded-4xl ">Login</button>
+                    <button className="bg-[#efefef] text-lg font-montserrat-medium py-2 px-4 rounded-4xl">Signup</button>
+                    </div>
                 </div>
             </div>
         </nav>
