@@ -1,50 +1,38 @@
-import axios from "axios";
+const TOP_50_GLOBAL_PLAYLIST_ID = "37i9dQZF1DXcBWIGoYBM5M"
 
-export async function fetchPlaylistWithPreviews(playlistId: string, accesstoken: string) {
+export async function getTopGlobalPlaylistTracks(token: any) {
+    const res = await fetch(`https://api.spotify.com/v1/playlists/${TOP_50_GLOBAL_PLAYLIST_ID}/tracks?limit=10`, {
 
-    try {
-    const spotifyResponse = await axios.get(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
-
-        headers: {
-            Authorization: `Bearer ${accesstoken}`,
-
-        },
-    }
-);    
-
-    const spotifyTracks = spotifyResponse.data.items;
-
-    const previewdTracks = await Promise.all (
-        spotifyTracks.map(async(item: any) => {
-            const name = item.track.name;
-            const artist = item.track.artist?.[0]?.name;
-
-            const iTunesUrl =`/api/itunes/search?term=${encodeURIComponent(`${artist} ${name}`)}&media=music&limit=1&entity=song`
-
-            try {
-                const iTunesResponse = await axios.get(iTunesUrl);
-                const iTunesTracks = iTunesResponse.data.results?.[0];
-
-                return {
-                    name,
-                    artist,
-                    image: item.track.album.images?.[0]?.url || "",
-                    previewUrl: iTunesTracks?.previewUrl || null,
-                };
-            } catch {
-                return {
-                    name,
-                    artist,
-                    image: item.track.album.images?.[0]?.url || "",
-                    previewUrl: null
-                }
-            }
-        })
+        headers: { Authorization: `Bearer ${token}` },
+    
+        }
     );
+    const data = await res.json();
+    return data.items;
+}
 
-    return previewdTracks;
-} catch(error) {
-    console.log("Error fetching playlist with previews", error);
-    return[];
- }
+export function extractUniqueArtist(tracks: any[]) {
+    const artistMap: { [key: string]: string } = {};
+    tracks.forEach(item => {
+        item.track.artists.forEach((artist: { id: string | number; name: any; }) => {
+            artistMap[artist.id] = artist.name
+        })
+    })
+
+    return Object.entries(artistMap).map(([id, name]) => ({id, name}));
+}
+
+export async function getArtistDetailToken(token: any, artistIds: any[]) {
+    const ids = artistIds.slice(0, 20).join(",")
+    const res = await fetch (
+        `https://api.spotify.com/v1/artists?ids=${ids}`,
+        {
+            headers: { Authorization: `Bearer ${token}` }
+        }
+    );
+    const data = await res.json();
+    return data.artist.map((artist: { name: any; image: any; }) => ({
+        name: artist.name,
+        image: artist.image[0]?.url || "",
+    }));
 }

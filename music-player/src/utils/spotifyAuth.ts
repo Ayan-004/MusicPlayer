@@ -1,17 +1,32 @@
-export async function getSpotifyToken() {
-    const clientId = "23eec544a4ab47dea456fc3b4ff50ee1"
-    const clientSecret = "28e2733c0ae34619b6ac799a21b15520"
+function base64(clientId: string, clientSecret: string): string {
+    return btoa(`${clientId}:${clientSecret}`)
+}
 
-    const response = await fetch("https://accounts.spotify.com/api/token", {
+export async function getSpotifyToken() {
+
+    try {
+    const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID
+    const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET
+    console.log("Client ID:", clientId);
+    console.log("Client Secret:", clientSecret);
+
+    const authString = base64(clientId, clientSecret)
+
+    
+    const res = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
-            Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+            Authorization: `Basic ${authString}`,
         },
         body: "grant_type=client_credentials",
     });
     
-    const data = await response.json();
-    
+    const data = await res.json();
+    console.log("Spotify Token Response", data);
     return data.access_token;
+    } catch (err) {
+        console.error("Error in getSpotifyToken", err)
+        throw err;
+    }
 }

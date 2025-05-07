@@ -3,11 +3,17 @@ import CardSlider from "../components/CardSlider"
 import Banner from "../components/Banner"
 import SongPreview from "../components/SongPreview"
 
+interface Artist {
+  name: string,
+  image: string
+}
+
 function Home() {
 
   const [artists, setArtists] = useState([]);
-  const [album, setAlbum] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [globalArtist, setGlobalArtist] = useState<Artist[]>([]);
+  const [loadingGlobal, setLoadingGlobal] = useState(true);
 
   useEffect(() => {
     setLoading(true);
@@ -39,19 +45,32 @@ function Home() {
         
 
 useEffect(() => {
-  fetch("https://saavn.dev/api/search/albums?query=hindi+punjabi+albums")
+  setLoadingGlobal(true);
+
+  fetch("https://itunes.apple.com/rss/topsongs/limit=10/json")
     .then((res) => res.json())
     .then((data) => {
-      
-      const entries = data?.data?.results || [];
+      const entries = data.feed.entry || [];
+      const artistMap:Record<string, { name: string; image: string }> = {};
 
-      const formatted = entries.map((album: any) => ({
-        name: album.name,
-        image: album.image?.[2]?.url || "",
-      }));
+      entries.forEach((entry: any) => {
+        const name = entry["im:artist"]?.label;
+        const imageArr = entry["im:image"];
+        const image = imageArr?.[imageArr.length - 1]?.label || "";
 
-      setAlbum(formatted);
-    })
+        if(name && !artistMap[name]) {
+          artistMap[name] = { name, image };
+        }
+      });
+
+      setGlobalArtist(Object.values(artistMap))
+      setLoadingGlobal(false)
+      })
+      .catch((error) => {
+        console.error("Error fetching global artist", error)
+        setGlobalArtist([]);
+        setLoadingGlobal(false);
+    });
 }, []);
 
 return (
@@ -67,7 +86,7 @@ return (
         </div>
 
         <CardSlider title="Top Artist" items={artists} loading={loading}/>
-        <CardSlider title="Top Albums" items={album}/>
+        <CardSlider title="Top Global Artist" artists={globalArtist} loading={loadingGlobal}/>
     </>
   );
 

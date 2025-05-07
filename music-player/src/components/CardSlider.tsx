@@ -73,7 +73,7 @@ function CardSlider({ title, items = [], artists = [], loading=false }: CardSlid
                     key={index}
                     className="min-w-[150px] rounded-2xl p-3 flex-shrink-0 flex flex-col items-center" 
                 >
-                    <Link to={`/artist/${items.name}`} className="block">
+                    <Link to={`/artist/${items.name}`} state={{ artistImage: items.image, isGlobal: items.isGlobal }} className="block">
                     <div className="card">
                     <img 
                         src={items.image}

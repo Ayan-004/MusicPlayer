@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation,useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { log } from "console";
 
 interface Song {
     title: string;
@@ -17,42 +18,83 @@ function decodeHTMLEntities(text: string): string {
 
 function ArtistProfile() {
     const { artistName } = useParams();
+    const location = useLocation();
+    const passedImage = location.state?.artistImage;
+    const isGlobal = location.state?.isGlobal;
+
     const [songs, setSongs] = useState<Song[]>([]);
-    const [artistImage, setArtistImage] = useState<string>("");
+    const [artistImage, setArtistImage] = useState<string>(passedImage || "");
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if(artistName) {
-            setLoading(true);
+        if (!artistName) return;
+        setLoading(true);
+
         fetch(`https://saavn.dev/api/search/songs?query=${encodeURIComponent(artistName)}`)
-        .then((res) => res.json())
-        .then((data) => {
+        .then(res => res.json())
+        .then(data => {
+            console.log("JioDaavn Api Data:", data);
+            
             const songList = data?.data?.results || [];
-            console.log("Full song object:", songList[0])
+            // const allArtists = songList.flatMap((song: any) => song.artists?.all || []);
 
-            const allArtists = songList.flatMap((song: any) => song.artists?.all || []);
-
-            const matchedArtist = allArtists.find((artist: any) => artist.name.toLowerCase() === artistName.toLowerCase());
+            // const matchedArtist = allArtists.find((artist: any) => artist.name.toLowerCase() === artistName.toLowerCase());
 
             
-            const songData = songList.map((song: any) => ({
-                title: decodeHTMLEntities(song.name || song.title || "Unknown Title"),
+            // 
+            
+            const songData = songList.filter((song: any) => {
+                const allArtists = [...(song.artists?.primary || []), ...(song.artists?.all || [])];
+                return allArtists.some(
+                    (a: any) => 
+                        a.name.toLowerCase().includes(artistName.toLowerCase())
+                )
+            })
+            .map((song: any) => ({
+                title: decodeHTMLEntities(song.name || song.title || "Unknown title"),
                 image: song.image?.[2]?.url || "",
                 artist: song.artists?.primary?.map((a: any) => a.name).join(",") || "Unknown Artist",
                 url: song?.perma_url || song.url || "",
-            }))
+            }))            
+                setSongs(songData);
+            })
+            .catch(() => {
+                setSongs([])
+            })
+            .finally(() => setLoading(false))
+            return;
 
-            setSongs(songData);
-            setArtistImage(matchedArtist?.image?.[2]?.url || "")
+        // fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(artistName)}&entity=musicArtist&limit=1`)
+        // .then((res) => res.json())
+        // .then(data => {
+        //     if(data.results && data.results.length > 0) {
+        //         const artistId = data.results[0].artistId;
 
-        
-        })
-        .catch((error) => console.error("Error fetching data:", error))
-        .finally(() => {
-            setLoading(false);
-        })
-    }
-    }, [artistName]);
+        //         return fetch(`https://itunes.apple.com/lookup?id=${artistId}&entity=song&limit=20&country=US`)
+        //         .then((res) => res.json())
+        //         .then((songData) => {
+        //             const itunesSongData = songData.results
+        //             .filter((item: any) => item.wrapperType === "track")
+        //             .map((song: any) => ({
+        //                 title: song.trackName,
+        //                 artist: song.artistName,
+        //                 image: song.artworkUrl100.replace("100x100bb", "600x600bb"),
+        //                 url: song.trackViewUrl
+        //             }));
+        //             setSongs(itunesSongData);
+        //         });
+        //     } else {
+        //         setSongs([]);
+        //     }
+        // })
+        // .catch(() => {
+        //     setSongs([]);
+        // })
+        // .finally(() => {
+        //     setLoading(false);
+        // });
+    
+}, [artistName]);
 
     return (
         <div className="artist-profile">
