@@ -7,19 +7,17 @@ function SideBar() {
             <img src={logo} alt="Logo" className="w-10 h-10 rounded-md" />
             <h2 className="sidebar-title text-5xl font-semibold">Audizi</h2>
             </div>
-            <h2 className="sidebar-title text-3xl pt-15 font-calsans">Library</h2>
-            <ul className="sidebar-menu pt-5 text-xl font-montserrat-medium text-[#464646]">
-                <li className="menu-item hover:bg-[#3d3b3b] backdrop-blur-md hover:text-[#cdd084] transition-all hover:rounded-full w-28 cursor-pointer hover:shadow-lg p-3">Songs</li>
-                <li className="menu-item hover:bg-[#3d3b3b] backdrop-blur-md hover:text-[#cdd084] transition-all hover:rounded-full w-28 cursor-pointer hover:shadow-lg p-3">Albums</li>
-                <li className="menu-item hover:bg-[#3d3b3b] backdrop-blur-md hover:text-[#cdd084] transition-all hover:rounded-full w-28 cursor-pointer hover:shadow-lg p-3">Artists</li>
+            <ul className="sidebar-menu pt-16 text-2xl font-montserrat-medium text-[#464646]">
+                <li className="menu-item hover:bg-[#3d3b3b] backdrop-blur-md hover:text-[#cdd084] transition-all hover:rounded-full w-28 cursor-pointer hover:shadow-lg p-3">Home</li>
+                <li className="menu-item hover:bg-[#3d3b3b] backdrop-blur-md hover:text-[#cdd084] transition-all hover:rounded-full w-28 cursor-pointer hover:shadow-lg p-3">Library</li>
+                <li className="menu-item hover:bg-[#3d3b3b] backdrop-blur-md hover:text-[#cdd084] transition-all hover:rounded-full w-32 cursor-pointer hover:shadow-lg p-3">Settings</li>
                 <li className="menu-item hover:bg-[#3d3b3b] backdrop-blur-md hover:text-[#cdd084] transition-all hover:rounded-full w-28 cursor-pointer hover:shadow-lg p-3">Radio</li>
             </ul>
 
-            <h2 className="sidebar-title font-calsans text-3xl pt-10">My music</h2>
-            <ul className="sidebar-menu pt-5 font-montserrat-medium text-xl text-[#464646]">
-                <li className="menu-item hover:backdrop-blur-md hover:bg-[#3d3b3b] hover:text-[#cdd084] transition-all rounded-full w-48 cursor-pointer hover:shadow-lg p-3">Recently Played</li>
-                <li className="menu-item hover:backdrop-blur-md hover:bg-[#3d3b3b] hover:text-[#cdd084] transition-all rounded-full w-48 cursor-pointer hover:shadow-lg p-3">Favorite Songs</li>
-                <li className="menu-item hover:backdrop-blur-md hover:bg-[#3d3b3b] hover:text-[#cdd084] transition-all rounded-full w-40 cursor-pointer hover:shadow-lg p-3">Local Files</li>
+            <ul className="sidebar-menu pt-5 font-montserrat-medium text-2xl text-[#464646]">
+                <li className="menu-item hover:backdrop-blur-md hover:bg-[#3d3b3b] hover:text-[#cdd084] transition-all rounded-full w-24 cursor-pointer hover:shadow-lg p-3">Login</li>
+
+                <li className="menu-item hover:backdrop-blur-md hover:bg-[#3d3b3b] hover:text-[#cdd084] transition-all rounded-full w-32 cursor-pointer hover:shadow-lg p-3">Sign Up</li>
             </ul>
         </div>
     );

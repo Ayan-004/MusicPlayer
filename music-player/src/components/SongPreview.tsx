@@ -98,7 +98,7 @@ const handleSlideChange = (swiper: any) => {
     
     return (
         <div className="song-item w-96 bg-[#efefef] p-6 rounded-4xl">
-        <h2 className="text-2xl font-calsans mb-4">Top Tracks</h2>
+        <h2 className="text-3xl font-calsans mb-4">Top Tracks</h2>
 
         {isLoading ? (
             <div className="flex justify-center items-center h-36">
@@ -130,9 +130,9 @@ const handleSlideChange = (swiper: any) => {
                                 e.currentTarget.src = 'path/to/fallback-image.jpg'
                             }}
                             />                      
-                            <p className="font-montserrat-medium text-xs pt-5">{items.trackName}</p>
+                            <p className="font-montserrat-medium text-xs pt-5 mx-14">{items.trackName}</p>
 
-                            <p className="font-montserrat-medium text-xs text-[#979797] pt-1">{items.artistName}</p>
+                            <p className="font-montserrat-medium text-xs text-[#979797] pt-1 mx-14">{items.artistName}</p>
 
                             {items.previewUrl ? (
                                 <div className="relative">

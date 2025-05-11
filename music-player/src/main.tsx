@@ -1,12 +1,19 @@
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
+import { SongProvider } from './SongContext.tsx'
+import React from 'react'
 
 const root = ReactDOM.createRoot(document.getElementById('root')!)
 
 root.render(
-  <Router>
-    <App />
-  </Router>,
+  <React.StrictMode>
+    <BrowserRouter>
+      <SongProvider>
+        <App />
+      </SongProvider>,
+    </BrowserRouter>
+  </React.StrictMode>
+
 );

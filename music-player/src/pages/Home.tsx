@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import CardSlider from "../components/CardSlider"
 import Banner from "../components/Banner"
 import SongPreview from "../components/SongPreview"
+import Footer from "../components/Footer"
 
 interface Artist {
   name: string,
@@ -87,6 +88,11 @@ return (
 
         <CardSlider title="Top Artist" items={artists} loading={loading}/>
         <CardSlider title="Top Global Artist" artists={globalArtist} loading={loadingGlobal}/>
+
+        <div>
+          <Footer/>
+        </div>
+        
     </>
   );
 

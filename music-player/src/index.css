@@ -53,6 +53,7 @@
 .swiper-button-next:after,
 .swiper-button-prev:after {
   color: #000000;
+  margin-bottom: 50px;
 }
 
 .fade-right {

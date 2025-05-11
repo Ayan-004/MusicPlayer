@@ -80,7 +80,7 @@ function CardSlider({ title, items = [], artists = [], loading=false }: CardSlid
                         alt={items.name} 
                         className="w-50 h-50 object-cover rounded-full mx-auto mb-3 shadow-lg shadow-gray-300 hover:cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out"/>
 
-                    <h2 className="text-lg font-montserrat-medium text-center text-black">{items.name}</h2>
+                    <h2 className="truncate max-w-[120px] ml-10 text-lg font-montserrat-medium text-center text-black">{items.name}</h2>
                     </div>
                     </Link>
                 </div>

@@ -1,21 +1,19 @@
-import search from "../assets/search.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+
+
 
 function NavBar(){
     return (
         <nav>
-            <div className="flex items-center justify-center p-4">
-                <div className="flex space-x-4">
-                <button className="py-2 px-4 rounded hover:cursor-pointer"><img src={search} alt="search icon" /></button>
-                    <button className="text-gray-500 text-lg font-montserrat-medium py-2 px-4 rounded hover:text-black transition-all cursor-pointer duration-300 ease-in-out">Home</button>
-                    <button className="text-gray-500 text-lg font-montserrat-medium py-2 px-4 rounded hover:text-black transition-all cursor-pointer duration-300 ease-in-out">Library</button>
-                    <button className="text-gray-500 text-lg font-montserrat-medium py-2 px-4 rounded hover:text-black transition-all cursor-pointer duration-300 ease-in-out">Settings</button>
+            <div className="flex items-center justify-center bg-[#efefef]  mx-96 mt-5 mb-5 rounded-4xl p-2">
+                <button className="py-2 px-4 hover:cursor-pointer"><FontAwesomeIcon icon={faMagnifyingGlass} className="text-gray-500"/></button>
+                <input 
+                type="Search"
+                placeholder="Search"
+                className="flex-grow font-montserrat-medium py-2 bg-transparent outline-none text-sm"
+                 />
 
-                    
-                    <div className="flex items-end justify-end ml-auto space-x-4">
-                    <button className="bg-[#efefef] text-lg font-montserrat-medium py-2 px-4 rounded-4xl ">Login</button>
-                    <button className="bg-[#efefef] text-lg font-montserrat-medium py-2 px-4 rounded-4xl">Signup</button>
-                    </div>
-                </div>
             </div>
         </nav>
     );
