@@ -20,7 +20,7 @@ function SongPreview() {
         try {
             setIsLoading(true)
 
-            const response = await axios.get('/api/rss/in/rss/topsongs/limit=10/json')
+            const response = await axios.get('https://itunes.apple.com/in/rss/topsongs/limit=10/json')
             const entries = response.data.feed.entry;
             const parsedSongs = entries.map((entry: any) => ({
                 trackName: entry["im:name"]?.label || "Unknown Title",
