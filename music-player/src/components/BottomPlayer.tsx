@@ -57,23 +57,33 @@ if(!currentSong || !currentSong?.url) return null;
 
 return(
 
-<div className="fixed bottom-5 w-3xl mx-auto left-52 right-0 px-6 py-4 backdrop-blur-3xl shadow-xl rounded-3xl border-gray-300 z-50">
+<div className="fixed bottom-5 w-auto md:max-w-3xl mx-3 md:mx-auto md:left-52 right-0 px-6 py-4 backdrop-blur-3xl shadow-xl rounded-3xl border-gray-300 z-50">
     <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 md:gap-1">
                 {currentSong.image && (
                     <img 
                     src={currentSong.image} 
                     alt={currentSong.title} 
                     className="w-12 h-12 rounded-md object-cover" />
                 )}
-        <div>
-            <p className="font-semibold text-sm pr-4">{currentSong.title}</p>
-            <p className="text-xs text-gray-500">{currentSong.artist}</p>
+        <div className="w-[150px] mr-2 md:w-auto">
+            {/* {Mobile marquee} */}
+            <div className="block md:hidden">
+            <div className="marquee font-montserrat-medium mr-2 text-sm"><span>{currentSong.title}</span></div>
+            <div className="marquee text-xs font-montserrat-medium mr-2 text-gray-500"><span>{currentSong.artist}</span></div>
+            </div>
         </div>
+
+            {/* {Desktop: Static Text} */}
+        <div className="hidden md:block">
+            <p className="marquee font-montserrat-medium text-sm">{currentSong.title}</p>
+            <p className="marquee text-xs font-montserrat-medium text-gray-500">{currentSong.artist}</p>
+        </div>
+
     </div>
 
-    <div className="flex items-center gap-6 pr-4">
+    <div className="flex items-center gap-6 md:pr-4">
         <button className="text-gray-600 hover:text-black">
             <FontAwesomeIcon icon={ faBackward } />
         </button>
@@ -83,19 +93,21 @@ return(
         <button className="text-gray-600 hover:text-black">
             <FontAwesomeIcon icon={ faForward } />
         </button>
-        <p className="text-sm text-gray-600">{formatTime(currentTime)} / {formatTime(duration)}</p>
     </div>
     </div>
 
-
+    <div className="flex items-center justify-between mt-2">
+    <p className="text-sm font-montserrat-medium pr-3 text-gray-600">{formatTime(currentTime)}</p>
     <input 
     type="range" 
     min="0"
     max={duration}
     value={currentTime}
     onChange={handleSeek}
-    className="w-full appearance-none rounded-full h-1 bg-black accent-black cursor-pointer"
+    className="w-full appearance-none rounded-full h-0.5 mt-1  bg-black accent-black cursor-pointer"
     />
+    <p className="text-sm font-montserrat-medium pl-3 text-gray-600">{formatTime(duration)}</p>
+    </div>
     </div>
 
     <audio 

@@ -4,9 +4,9 @@ import { faLinkedin, faInstagram, faGithub } from "@fortawesome/free-brands-svg-
 
 const Footer = () => {
     return (
-        <footer className="bg-[#efefef] text-[#464646] font-calsans px-6 py-20 mt-10 flex flex-col items-center text-center space-y-10">
+        <footer className="bg-[#efefef] text-[#464646] font-calsans px-6 py-20 mt-10 pb-60 md:pb-40 flex flex-col items-center text-center space-y-10">
 
-    <h1 className="text-base px-10 sm:text-lg">Designed & Developed by Ayan | © 2025 All Rights Reserved</h1>
+    <h1 className="text-base px-12 md:px-10 sm:text-lg">Designed & Developed by Ayan | © 2025 All Rights Reserved</h1>
 
     <div className="flex items-center justify-center space-x-6">
 

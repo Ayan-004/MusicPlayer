@@ -97,8 +97,8 @@ const handleSlideChange = (swiper: any) => {
     
     
     return (
-        <div className="song-item w-96 bg-[#efefef] p-6 rounded-4xl">
-        <h2 className="text-3xl font-calsans mb-4">Top Tracks</h2>
+        <div className="song-item w-full max-w-sm mt-5 md:mt-9 bg-[#efefef] p-6 rounded-4xl">
+        <h2 className="text-2xl md:text-3xl font-calsans mb-4">Top Tracks</h2>
 
         {isLoading ? (
             <div className="flex justify-center items-center h-36">

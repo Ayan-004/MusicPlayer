@@ -76,12 +76,12 @@ useEffect(() => {
 
 return (
     <>
-    <div className="flex item-start justify-between gap-8">
-        <div className="w-1/2">
+    <div className="flex flex-col lg:flex-row item-start gap-6 m-6">
+        <div className="w-full lg:w-2/3">
             <Banner />
         </div>
 
-        <div className="pt-11 pr-7">    
+        <div className="w-full lg:w-1/3">    
             <SongPreview />
         </div>
         </div>
