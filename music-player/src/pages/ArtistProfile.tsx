@@ -23,7 +23,7 @@ function ArtistProfile() {
     const passedImage = location.state?.artistImage;
 
     const [songs, setSongs] = useState<Song[]>([]);
-    const [artistImage, setArtistImage] = useState<string>(passedImage || "");
+    const [artistImage] = useState<string>(passedImage || "");
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
