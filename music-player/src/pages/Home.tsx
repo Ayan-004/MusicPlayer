@@ -9,6 +9,10 @@ interface Artist {
   image: string
 }
 
+const upgradeImageQuality = (url: string): string => {
+  return url.replace(/\/\d+x\d+bb\.png$/, "/500x500bb.png")
+};
+
 function Home() {
 
   const [artists, setArtists] = useState([]);
@@ -57,7 +61,10 @@ useEffect(() => {
       entries.forEach((entry: any) => {
         const name = entry["im:artist"]?.label;
         const imageArr = entry["im:image"];
-        const image = imageArr?.[imageArr.length - 1]?.label || "";
+        const rawImage = imageArr?.[imageArr.length - 1]?.label || "";
+        console.log("raw image url:", rawImage);
+        const image = upgradeImageQuality(rawImage);
+        console.log("Upgraded image url:", image);
 
         if(name && !artistMap[name]) {
           artistMap[name] = { name, image };
