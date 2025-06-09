@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ElasticSlider from "./ElasticSlider";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 
 const FullPagePlayer = () => {
   const {
@@ -22,7 +22,6 @@ const FullPagePlayer = () => {
     currentTime,
     setCurrentTime,
     duration,
-    setDuration,
     audioRef,
     volume,
     setVolume

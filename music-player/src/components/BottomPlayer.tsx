@@ -6,7 +6,6 @@ import {
   faForward,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useRef, useState } from "react";
 
 const BottomPlayer = () => {
   const {
@@ -18,7 +17,6 @@ const BottomPlayer = () => {
     currentTime,
     setCurrentTime,
     duration,
-    setDuration,
     audioRef
   } = useSong();
 
