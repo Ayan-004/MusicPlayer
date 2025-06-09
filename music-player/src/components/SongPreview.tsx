@@ -33,7 +33,6 @@ function SongPreview() {
                 previewUrl: entry.link?.find((link: any) => link?.attributes?.type === "audio/x-m4a")?.attributes?.href || "",
             }));
             setTrack(parsedSongs)
-            console.log(parsedSongs);
 
             setIsLoading(false);
             

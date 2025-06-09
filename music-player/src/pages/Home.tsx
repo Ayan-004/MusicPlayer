@@ -62,9 +62,7 @@ useEffect(() => {
         const name = entry["im:artist"]?.label;
         const imageArr = entry["im:image"];
         const rawImage = imageArr?.[imageArr.length - 1]?.label || "";
-        console.log("raw image url:", rawImage);
         const image = upgradeImageQuality(rawImage);
-        console.log("Upgraded image url:", image);
 
         if(name && !artistMap[name]) {
           artistMap[name] = { name, image };

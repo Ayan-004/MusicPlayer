@@ -37,7 +37,6 @@ function ArtistProfile() {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log("JioDaavn Api Data:", data);
 
         const songList = data?.data?.results || [];
         const songData = songList
