@@ -10,7 +10,6 @@ import {
 const MAX_OVERFLOW = 50;
 
 interface ElasticSliderProps {
-  defaultValue?: number;
   startingValue?: number;
   maxValue?: number;
   className?: string;
@@ -23,7 +22,6 @@ interface ElasticSliderProps {
 }
 
 const ElasticSlider: React.FC<ElasticSliderProps> = ({
-  defaultValue = 50,
   startingValue = 0,
   maxValue = 100,
   className = "",
@@ -39,7 +37,6 @@ const ElasticSlider: React.FC<ElasticSliderProps> = ({
       className={`flex flex-col items-center justify-center gap-4 w-48 ${className}`}
     >
       <Slider
-        defaultValue={defaultValue}
         startingValue={startingValue}
         maxValue={maxValue}
         isStepped={isStepped}
@@ -54,7 +51,6 @@ const ElasticSlider: React.FC<ElasticSliderProps> = ({
 };
 
 interface SliderProps {
-  defaultValue: number;
   startingValue: number;
   maxValue: number;
   isStepped: boolean;
@@ -66,7 +62,6 @@ interface SliderProps {
 }
 
 const Slider: React.FC<SliderProps> = ({
-  defaultValue,
   startingValue,
   maxValue,
   isStepped,
