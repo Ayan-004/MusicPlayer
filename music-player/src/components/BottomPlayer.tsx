@@ -70,7 +70,7 @@ const BottomPlayer = () => {
   if (!currentSong || !currentSong?.url || showFullPlayer) return null;
 
   return (
-    <div className="fixed bottom-5 w-auto md:max-w-3xl mx-3 md:mx-auto md:left-52 right-0 px-6 py-4 backdrop-blur-3xl shadow-xl rounded-3xl border-gray-300 z-40">
+    <div className="fixed bottom-5 min-w-11/12 lg:mx-52 lg:left-52 lg:min-w-fit mx-4 md:left-0 md:mx-5 right-0 px-6 py-4 backdrop-blur-xl shadow-2xl border border-gray-300/50 rounded-3xl z-40">
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div onClick={() => setShowFullPlayer(true)} className="flex items-center gap-4 md:gap-1">
@@ -81,47 +81,47 @@ const BottomPlayer = () => {
                 className="w-12 h-12 rounded-md object-cover"
               />
             )}
-            <div className="w-[150px] mr-2 md:w-auto">
+            <div className="w-[130px] mr-2 md:w-auto">
               {/* {Mobile marquee} */}
               <div className="block md:hidden">
                 <div className="marquee font-montserrat-medium mr-2 text-sm">
                   <span>{currentSong.title}</span>
                 </div>
-                <div className="marquee text-xs font-montserrat-medium mr-2 text-gray-500">
+                <div className="marquee text-xs font-montserrat-medium mr-2 text-gray-700">
                   <span>{currentSong.artist}</span>
                 </div>
               </div>
             </div>
 
             {/* {Desktop: Static Text} */}
-            <div className="hidden md:block">
+            <div className="hidden md:block hover:cursor-pointer">
               <p className="marquee font-montserrat-medium text-sm">
                 {currentSong.title}
               </p>
-              <p className="marquee text-xs font-montserrat-medium text-gray-500">
+              <p className="marquee text-xs font-montserrat-medium text-gray-700">
                 {currentSong.artist}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-6 md:pr-4">
-            <button className="text-gray-600 hover:text-black">
+            <button className="text-gray-900 hover:text-black cursor-pointer text-xl">
               <FontAwesomeIcon icon={faBackward} />
             </button>
             <button
               onClick={togglePlay}
-              className="text-gray-600 hover:text-black text-xl"
+              className="w-5 text-gray-900 hover:text-black cursor-pointer text-xl"
             >
               <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
             </button>
-            <button className="text-gray-600 hover:text-black">
+            <button className="text-gray-900 hover:text-black cursor-pointer text-xl">
               <FontAwesomeIcon icon={faForward} />
             </button>
           </div>
         </div>
 
         <div className="flex items-center justify-between mt-2">
-          <p className="text-sm font-montserrat-medium pr-3 text-gray-600">
+          <p className="w-10 text-sm font-montserrat-medium pr-3 text-gray-600">
             {formatTime(currentTime)}
           </p>
           <input

@@ -100,7 +100,7 @@ const handleSlideChange = (swiper: any) => {
     
     
     return (
-        <div className="song-item w-full max-w-sm mt-5 md:mt-9 bg-[#efefef] p-6 rounded-4xl">
+        <div className="song-item lg:mt-10 lg:ml-3 md:w-2xl md:mt-5 md:ml-7 lg:w-full lg:max-w-sm bg-[#efefef] p-6 rounded-4xl">
         <h2 className="text-2xl md:text-3xl font-calsans mb-4">Top Tracks</h2>
 
         {isLoading ? (
@@ -128,7 +128,7 @@ const handleSlideChange = (swiper: any) => {
                             <img 
                             src={items.artworkUrl100}
                             alt={items.trackName}  
-                            className="w-40 h-40 rounded-4xl shadow-2xl shadow-gray-700"
+                            className="w-40 h-40 md:w-52 md:h-52 rounded-4xl shadow-2xl shadow-gray-700"
                             onError={(e) => {
                                 e.currentTarget.src = 'path/to/fallback-image.jpg'
                             }}

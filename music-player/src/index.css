@@ -63,7 +63,7 @@
     mask-repeat: no-repeat
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .fade-img {
     -webkit-mask-image: 
       linear-gradient(to top, transparent 5%, black 60%);

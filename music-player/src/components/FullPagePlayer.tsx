@@ -68,7 +68,7 @@ const FullPagePlayer = () => {
   if (!showFullPlayer || !currentSong) return null;
 
   return (
-    <div className="fixed top-0 w-full sm:w-auto md:left-[230px] right-0 bottom-0 md:rounded-l-4xl backdrop-blur-3xl text-black z-50 p-6 flex flex-col items-center justify-center overflow-hidden">
+    <div className="fixed top-0 min-w-full lg:min-w-min lg:left-[230px] right-0 bottom-0 lg:rounded-l-4xl backdrop-blur-xl lg:backdrop-blur-2xl text-black z-50 p-6 flex flex-col items-center justify-center overflow-hidden">
       <ElasticSlider
         value={volume * 100}
         leftIcon={<FontAwesomeIcon icon={faVolumeLow} />}
@@ -81,7 +81,7 @@ const FullPagePlayer = () => {
         onChange={(val) => setVolume(val / 100)}
       />
       <button
-        className="absolute top-10 right-10 text-4xl hover:cursor-pointer"
+        className="absolute top-10 right-10 text-3xl lg:text-4xl hover:cursor-pointer"
         onClick={() => setShowFullPlayer(false)}
       >
         <FontAwesomeIcon icon={faCircleXmark} />
@@ -91,31 +91,31 @@ const FullPagePlayer = () => {
         <img
           src={currentSong.image}
           alt={currentSong.title}
-          className="w-70 h-70 sm:w-50 sm:h-50 md:w-100 md:h-100 rounded-4xl shadow-2xl object-cover"
+          className="w-70 h-70 sm:w-50 sm:h-50 md:w-60 md:h-60 lg:w-80 lg:h-80 rounded-4xl shadow-2xl object-cover"
         />
 
-        <h1 className="text-sm font-montserrat-medium">{currentSong.title}</h1>
-        <p className="w-2xs text-center text-xs text-wrap font-montserrat-medium text-gray-500">
+        <h1 className="text-sm lg:text-xl text-center font-montserrat-medium">{currentSong.title}</h1>
+        <p className="w-2xs text-center text-xs text-wrap font-montserrat-medium text-gray-700">
           {currentSong.artist}
         </p>
 
-        <div className="flex space-x-6 mt-6 text-2xl">
-          <button className="text-gray-600 hover:text-black">
+        <div className="flex mt-3 text-2xl">
+          <button className="text-gray-900 hover:text-black hover:scale-110 transition-all duration-500 ease-in-out cursor-pointer">
             <FontAwesomeIcon icon={faBackward} />
           </button>
           <button
             onClick={togglePlay}
-            className="text-gray-600 hover:text-black text-xl"
+            className=" w-5 mx-10 text-gray-900 hover:text-black hover:scale-110 transition-all duration-500 ease-in-out cursor-pointer"
           >
             <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
           </button>
-          <button className="text-gray-600 hover:text-black">
+          <button className="text-gray-900 hover:text-black hover:scale-110 transition-all duration-500 ease-in-out cursor-pointer">
             <FontAwesomeIcon icon={faForward} />
           </button>
         </div>
 
-        <div className="flex items-center justify-between mt-2">
-          <p className="text-sm font-montserrat-medium pr-3 text-gray-600">
+        <div className="flex items-center justify-between  mt-2">
+          <p className="w-10 text-sm font-montserrat-medium pr-3 text-gray-700">
             {formatTime(currentTime)}
           </p>
           <input
@@ -124,9 +124,9 @@ const FullPagePlayer = () => {
             max={duration}
             value={currentTime}
             onChange={handleSeek}
-            className="w-56  md:w-5xl appearance-none rounded-full h-0.5 mt-1  bg-black accent-black cursor-pointer"
+            className="w-56 md:w-72 appearance-none rounded-full h-0.5 mt-1  bg-black accent-black cursor-pointer"
           />
-          <p className="text-sm font-montserrat-medium pl-3 text-gray-600">
+          <p className="text-sm font-montserrat-medium pl-3 text-gray-700">
             {formatTime(duration)}
           </p>
         </div>

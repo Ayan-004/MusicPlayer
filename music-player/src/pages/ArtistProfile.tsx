@@ -77,10 +77,10 @@ function ArtistProfile() {
           <img
             src={artistImage}
             alt={artistName}
-            className="w-96 h-60 md:w-96 md:h-80 rounded-t-4xl md:rounded-l-4xl md:rounded-t-none object-cover shadow-2xl fade-img"
+            className="w-full h-60 md:w-96 md:h-80 rounded-t-4xl md:rounded-l-4xl md:rounded-t-none object-cover shadow-2xl fade-img"
           />
         )}
-        <h1 className="text-4xl md:text-7xl font-calsans text-center md:pl-10 pb-5 md:pb-0 break-words max-w-full md:max-w-[70%]">
+        <h1 className="text-4xl md:text-5xl lg:text-7xl font-calsans text-center md:pl-10 pb-5 md:pb-0 break-words max-w-full md:max-w-[40%] lg:max-w-[70%]">
           {artistName}
         </h1>
       </div>

@@ -2,7 +2,7 @@ import weekend from "../assets/weekend.png"
 
 function Banner() {
   return (
-        <div className="flex flex-row md:flex-row items-center justify-between bg-[#be5c2b] text-amber-50 m- md:m-10 md:w-3xl rounded-4xl shadow-2xl shadow-[#be5c2b] overflow-hidden">
+        <div className="flex flex-row md:flex-row items-center justify-between bg-[#be5c2b] text-amber-50 md:m-6 md:w-2xl lg:w-3xl lg:m-10 rounded-4xl shadow-2xl shadow-[#be5c2b] overflow-hidden">
           <div className="flex flex-col p-6 md:p-10">
             <h5 className="text-xs font-light pb-4">CURATED PLAYLIST</h5>
             <h1 className="text-xl sm:text-2xl md:text-4xl font-calsans pb-3">BLINDING LIGHT</h1>

@@ -20,7 +20,7 @@ const NavBar = () => {
     return (
         
         <form onSubmit={handleSearch} className="flex justify-center w-full">
-            <div className="flex items-center bg-[#efefef] ml-16 sm:ml-0 m-5 mt-5 mb-5 rounded-4xl p-2 w-full max-w-md">
+            <div className="flex items-center bg-[#efefef] ml-16 sm:ml-0 m-5 mt-5 mb-5 rounded-4xl p-2 w-full max-w-md md:max-w-xl md:ml-16">
             <input 
             type="text" 
             placeholder="Search songs..."

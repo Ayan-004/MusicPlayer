@@ -12,7 +12,7 @@ function SideBar({collapsed, setCollapsed}: SideBarProps) {
     
     return (
     
-        <div className={`fixed top-0 left-0 z-40 h-full bg-[#b4b4b4] backdrop-blur-lg text-black pt-4 shadow-xl w-64 transition-transform duration-300 sm:static sm:translate-x-0  ${collapsed ? '-translate-x-full sm:translate-x-0' : 'translate-x-0'}`}>
+        <div className={`fixed top-0 left-0 z-40 h-full bg-gray-00 border border-gray-300/50 backdrop-blur-xl lg:backdrop-blur-none lg:bg-gray-300 text-black pt-4 shadow-xl w-64 transition-transform duration-300 lg:static lg:translate-x-0  ${collapsed ? '-translate-x-full lg:translate-x-0' : 'translate-x-0'}`}>
 
 
             <div className="font-calsans">
@@ -22,7 +22,7 @@ function SideBar({collapsed, setCollapsed}: SideBarProps) {
                    <span className={`hidden sm:inline ${collapsed ? 'hidden' : 'inline'}`}>Audizi</span>
                 </h2>
                 </div>
-                <div className="absolute top-8 right-4 sm:hidden">
+                <div className="absolute top-8 right-4 lg:hidden">
                 <button onClick={() => setCollapsed(true)}>
                     <FontAwesomeIcon icon={faTimes} />
                 </button>
