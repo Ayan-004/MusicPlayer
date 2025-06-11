@@ -17,18 +17,8 @@ const BottomPlayer = () => {
     currentTime,
     setCurrentTime,
     duration,
-    audioRef
+    audioRef,
   } = useSong();
-
-  // useEffect(() => {
-  //   if (currentSong && audioRef.current) {
-  //     audioRef.current.load();
-  //     audioRef.current
-  //       .play()
-  //       .then(() => setIsPlaying(true))
-  //       .catch(console.error);
-  //   }
-  // }, [currentSong]);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -40,18 +30,6 @@ const BottomPlayer = () => {
       setIsPlaying(true);
     }
   };
-
-  // const handleTimeUpdate = () => {
-  //   if (audioRef.current) {
-  //     setCurrentTime(audioRef.current.currentTime);
-  //   }
-  // };
-
-  // const handleLoadedMetadata = () => {
-  //   if (audioRef.current) {
-  //     setDuration(audioRef.current.duration);
-  //   }
-  // };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
@@ -67,13 +45,16 @@ const BottomPlayer = () => {
     return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
   };
 
-  if (!currentSong || !currentSong?.url || showFullPlayer) return null;
+  if (!currentSong || !currentSong?.url) return null;
 
   return (
-    <div className="fixed bottom-5 min-w-11/12 lg:mx-52 lg:left-52 lg:min-w-fit mx-4 md:left-0 md:mx-5 right-0 px-6 py-4 backdrop-blur-xl shadow-2xl border border-gray-300/50 rounded-3xl z-40">
+    <div className={`fixed bottom-5 min-w-11/12 lg:mx-52 lg:left-52 lg:min-w-fit mx-4 md:left-0 md:mx-5 right-0 px-6 py-4 backdrop-blur-xl shadow-2xl border border-gray-300/50 rounded-3xl z-40 transition-all duration-500 ease-in-out ${showFullPlayer ? 'opacity-0 translate-y-5 blur-sm scale-95 pointer-events-none' : 'opacity-100 translate-y-0 blur-0 scale-100'}`}>
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <div onClick={() => setShowFullPlayer(true)} className="flex items-center gap-4 md:gap-1">
+          <div
+            onClick={() => setShowFullPlayer(true)}
+            className="flex items-center gap-4 md:gap-1"
+          >
             {currentSong.image && (
               <img
                 src={currentSong.image}
@@ -130,22 +111,13 @@ const BottomPlayer = () => {
             max={duration}
             value={currentTime}
             onChange={handleSeek}
-            className="w-full appearance-none rounded-full h-0.5 mt-1  bg-black accent-black cursor-pointer"
+            className="progress-bar w-full appearance-none rounded-full h-1 mt-1 cursor-grab" style={{"--progress": `${(currentTime / duration) * 100 || 0}%`} as React.CSSProperties}
           />
           <p className="text-sm font-montserrat-medium pl-3 text-gray-600">
             {formatTime(duration)}
           </p>
         </div>
       </div>
-
-      {/* <audio
-        ref={audioRef}
-        onTimeUpdate={handleTimeUpdate}
-        onLoadedMetadata={handleLoadedMetadata}
-      >
-        <source src={currentSong.url} type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio> */}
     </div>
   );
 };

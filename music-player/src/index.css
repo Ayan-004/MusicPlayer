@@ -94,3 +94,53 @@ html, body, #root{
   margin: 0;
   padding: 0;
 }
+
+input[type='range'].progress-bar {
+  background: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+input[type='range'].progress-bar::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: #a3a4a7;
+  position: relative;
+  z-index: 1;
+  /* background: linear-gradient(to right, black 0%, black var(--progress), #aeb0b3 var(--progress), #aeb0b3 100%); */
+}
+
+input[type='range'].progress-bar::before {
+  content: '';
+  position: absolute;
+  height: 6px;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: black;
+  border-radius: 9999px;
+  width: var(--progress);
+  pointer-events: none;
+  z-index: 2;
+}
+
+input[type='range'].progress-bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 0px;
+  width: 0px;
+  background: transparent;
+  margin-top: 2px;
+}
+
+input[type='range'].progress-bar::-moz-range-track {
+  height: 6px;
+  border-radius: 10px;
+  background: linear-gradient(to right, black 0%, black var(--progress), #aeb0b3 var(--progress), #aeb0b3 100%);
+}
+
+input[type='range'].progress-bar::-moz-range-thumb {
+  height: 0px;
+  width: 0px;
+  border: transparent;
+  border: none;
+}
