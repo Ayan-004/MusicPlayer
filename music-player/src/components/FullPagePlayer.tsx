@@ -30,11 +30,6 @@ const FullPagePlayer = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!showFullPlayer) {
-      setShowFullPlayer(true);
-    }
-  }, []);
 
   useEffect(() => {
     if (currentSong && audioRef.current) {
