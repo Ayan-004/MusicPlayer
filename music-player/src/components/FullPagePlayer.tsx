@@ -10,7 +10,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ElasticSlider from "./ElasticSlider";
-import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 const FullPagePlayer = () => {
@@ -27,8 +26,6 @@ const FullPagePlayer = () => {
     volume,
     setVolume,
   } = useSong();
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (currentSong && audioRef.current) {
