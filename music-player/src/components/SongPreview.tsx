@@ -100,7 +100,7 @@ const handleSlideChange = (swiper: any) => {
     
     
     return (
-        <div className="song-item lg:mt-10 lg:ml-3 md:w-2xl md:mt-5 md:ml-7 lg:w-full lg:max-w-sm bg-[#efefef] p-6 rounded-4xl">
+        <div className="song-item h-96 lg:h-11/12 lg:mt-10 lg:ml-3 md:w-2xl md:mt-5 md:ml-7 lg:w-full lg:max-w-sm bg-[#efefef] p-6 rounded-4xl">
         <h2 className="text-2xl md:text-3xl font-calsans mb-4">Top Tracks</h2>
 
         {isLoading ? (
@@ -147,7 +147,7 @@ const handleSlideChange = (swiper: any) => {
                                 </audio>
                                 <button
                                 onClick={handleMuteToggle}
-                                className="absolute top-3 -right-4 bg-[#cbcbcb] rounded-full p-2 text-xs hover:cursor-pointer"
+                                className="absolute w-8 top-3 -right-4 bg-[#cbcbcb] rounded-full p-2 text-xs hover:cursor-pointer"
                                 >
                                    <FontAwesomeIcon icon= {isMuted ? faVolumeMute : faVolumeHigh}/>
                                 </button>
