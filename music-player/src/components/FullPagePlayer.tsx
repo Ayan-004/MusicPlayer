@@ -30,7 +30,6 @@ const FullPagePlayer = () => {
 
   const navigate = useNavigate();
 
-
   useEffect(() => {
     if (currentSong && audioRef.current) {
       // audioRef.current.load();
@@ -77,10 +76,7 @@ const FullPagePlayer = () => {
     >
       <button
         className="absolute top-10 right-10 text-3xl lg:text-4xl hover:cursor-pointer"
-        onClick={() => {
-          setShowFullPlayer(false);
-          navigate("/");
-        }}
+        onClick={() => setShowFullPlayer(false)}
       >
         <FontAwesomeIcon icon={faCircleXmark} />
       </button>
