@@ -147,7 +147,7 @@ const handleSlideChange = (swiper: any) => {
                                 </audio>
                                 <button
                                 onClick={handleMuteToggle}
-                                className="absolute w-8 top-3 -right-4 bg-[#cbcbcb] rounded-full p-2 text-xs hover:cursor-pointer"
+                                className="absolute w-8 top-3 text-center -right-4 bg-[#cbcbcb] rounded-full p-2 text-xs hover:cursor-pointer"
                                 >
                                    <FontAwesomeIcon icon= {isMuted ? faVolumeMute : faVolumeHigh}/>
                                 </button>
