@@ -100,8 +100,8 @@ const handleSlideChange = (swiper: any) => {
     
     
     return (
-        <div className="song-item h-96 lg:h-11/12 lg:mt-10 lg:ml-3 md:w-2xl md:mt-5 md:ml-7 lg:w-full lg:max-w-sm bg-[#efefef] p-6 rounded-4xl">
-        <h2 className="text-2xl md:text-3xl font-calsans mb-4">Top Tracks</h2>
+        <div className="song-item min-h-auto xl:h-11/12 xl:mt-10 xl:ml-3 md:w-2xl md:mt-5 md:ml-7 lg:w-full lg:-ml-1 lg:max-w-sm bg-[#efefef] p-6 rounded-4xl">
+        <h2 className="text-2xl md:text-2xl lg:text-3xl font-calsans mb-4">Top Tracks</h2>
 
         {isLoading ? (
             <div className="flex justify-center items-center h-36">
@@ -128,14 +128,14 @@ const handleSlideChange = (swiper: any) => {
                             <img 
                             src={items.artworkUrl100}
                             alt={items.trackName}  
-                            className="w-40 h-40 md:w-52 md:h-52 rounded-4xl shadow-2xl shadow-gray-700"
+                            className="w-40 h-40 md:w-52 md:h-52 lg:w-44 lg:h-44 rounded-4xl shadow-2xl shadow-gray-700"
                             onError={(e) => {
                                 e.currentTarget.src = 'path/to/fallback-image.jpg'
                             }}
                             />                      
-                            <p className="font-montserrat-medium text-xs pt-5 mx-14">{items.trackName}</p>
+                            <p className="font-montserrat-medium text-center text-xs pt-5 mx-14">{items.trackName}</p>
 
-                            <p className="font-montserrat-medium text-xs text-[#979797] pt-1 mx-14">{items.artistName}</p>
+                            <p className="font-montserrat-medium text-center text-xs text-[#979797] pt-1 mx-14">{items.artistName}</p>
 
                             {items.previewUrl ? (
                                 <div className="relative">

@@ -59,7 +59,7 @@ function CardSlider({ title, items = [], artists = [], loading=false }: CardSlid
             {/* LeftScroll buttons */}
             <button
                 onClick={scrollLeft}
-                className="hidden lg:block absolute top-44 left-3 transform -translate-y-1/2 backdrop-blur-lg rounded-full p-2 hover:shadow-lg transition-all cursor-pointer z-10">
+                className="hidden xl:block absolute top-44 left-3 transform -translate-y-1/2 backdrop-blur-lg rounded-full p-2 hover:shadow-lg transition-all cursor-pointer z-10">
                     <ChevronLeft />
             </button>
 
@@ -92,7 +92,7 @@ function CardSlider({ title, items = [], artists = [], loading=false }: CardSlid
 
         {/* RightScroll buttons */}
         <button
-            className="hidden lg:block absolute top-44 right-3 transform -translate-y-1/2 backdrop-blur-lg rounded-full p-2 hover:shadow-lg cursor-pointer z-10"
+            className="hidden xl:block absolute top-44 right-3 transform -translate-y-1/2 backdrop-blur-lg rounded-full p-2 hover:shadow-lg cursor-pointer z-10"
             onClick={scrollRight}>
                 <ChevronRight />
         </button>

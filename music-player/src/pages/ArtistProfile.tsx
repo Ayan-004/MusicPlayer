@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { motion } from "framer-motion";
 import { useSong } from "../components/context/SongContext";
+import { AnimatedItem } from "../components/AnimateItem";
 
 interface Song {
   title: string;
@@ -33,11 +33,10 @@ function ArtistProfile() {
     fetch(
       `https://saavn.dev/api/search/songs?query=${encodeURIComponent(
         artistName
-      )}`
+      )}&page=1&limit=50`
     )
       .then((res) => res.json())
       .then((data) => {
-
         const songList = data?.data?.results || [];
         const songData = songList
           .filter((song: any) => {
@@ -99,8 +98,10 @@ function ArtistProfile() {
       ) : (
         <div className="flex flex-col gap-2 bg-[#efefef] p-10 rounded-4xl m-3 md:m-6 mb-56 md:pb-24">
           {songs.map((song, index) => (
-            <motion.div
+            <AnimatedItem
               key={index}
+              index={index}
+              delay={0}
               onClick={() =>
                 setCurrentSong({
                   title: song.title,
@@ -109,11 +110,6 @@ function ArtistProfile() {
                   url: song.url,
                 })
               }
-              initial={{ opacity: 0, scale: 0.9, y: 50 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.1, ease: "easeInOut" }}
-              viewport={{ once: true, amount: 0.5 }}
-              className="flex items-center gap-4 p-4 pl-0 md:pl-10 rounded-3xl shadow=sm hover:bg-[#cecece] transition hover:cursor-pointer"
             >
               {song.image?.trim() && (
                 <img
@@ -130,7 +126,7 @@ function ArtistProfile() {
                   {song.artist}
                 </p>
               </div>
-            </motion.div>
+            </AnimatedItem>
           ))}
         </div>
       )}

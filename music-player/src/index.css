@@ -144,3 +144,12 @@ input[type='range'].progress-bar::-moz-range-thumb {
   border: transparent;
   border: none;
 }
+
+@layer utilities {
+  @media (max-width: 320px) {
+    .xs {
+      font-size: 12px;
+      max-width: 80px;
+    }
+  }
+}

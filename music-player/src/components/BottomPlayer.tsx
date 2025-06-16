@@ -49,7 +49,7 @@ const BottomPlayer = () => {
 
   return (
     <div
-      className={`fixed bottom-5 min-w-11/12 lg:mx-52 lg:left-52 lg:min-w-fit mx-4 md:left-0 md:mx-5 right-0 px-6 py-4 backdrop-blur-xl shadow-2xl border border-gray-300/50 rounded-3xl z-40 transition-all duration-500 ease-in-out ${
+      className={`fixed bottom-5 min-w-11/12 xl:mx-52 xl:left-52 xl:min-w-fit mx-4 md:left-0 md:mx-5 right-0 px-6 py-4 backdrop-blur-xl shadow-2xl border border-gray-300/50 rounded-3xl z-40 transition-all duration-500 ease-in-out ${
         showFullPlayer
           ? "opacity-0 translate-y-5 blur-sm scale-95 pointer-events-none"
           : "opacity-100 translate-y-0 blur-0 scale-100"
@@ -68,7 +68,7 @@ const BottomPlayer = () => {
                 className="w-12 h-12 rounded-md object-cover"
               />
             )}
-            <div className="w-[130px] mr-2 md:w-auto">
+            <div className="xs w-[130px] md:w-auto mr-2">
               {/* {Mobile marquee} */}
               <div className="block md:hidden">
                 <div className="marquee font-montserrat-medium mr-2 text-sm">
