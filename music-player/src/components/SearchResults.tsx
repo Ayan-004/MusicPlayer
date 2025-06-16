@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useSong } from "./context/SongContext";
-import { motion } from "framer-motion";
 import { AnimatedItem } from "./AnimateItem";
 
 interface Song {
