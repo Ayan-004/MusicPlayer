@@ -101,7 +101,6 @@ function ArtistProfile() {
             <AnimatedItem
               key={index}
               index={index}
-              delay={0}
               onClick={() =>
                 setCurrentSong({
                   title: song.title,

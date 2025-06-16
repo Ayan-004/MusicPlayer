@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useSong } from "./context/SongContext";
 import { motion } from "framer-motion";
+import { AnimatedItem } from "./AnimateItem";
 
 interface Song {
   title: string;
@@ -29,7 +30,7 @@ const SearchResults = () => {
 
     setLoading(true);
     fetch(
-      `https://saavn.dev/api/search/songs?query=${encodeURIComponent(query)}`
+      `https://saavn.dev/api/search/songs?query=${encodeURIComponent(query)}&page=1&limit=50`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -64,8 +65,9 @@ const SearchResults = () => {
       ) : (
         <div className="space-y-4">
           {songs.map((song, index) => (
-            <motion.div
+            <AnimatedItem
               key={index}
+              index={index}
               onClick={() =>
                 setCurrentSong({
                   title: song.title,
@@ -74,11 +76,7 @@ const SearchResults = () => {
                   url: song.url,
                 })
               }
-              initial={{ opacity: 0, scale: 0.9, y: 50 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.1, ease: "easeInOut" }}
-              viewport={{ once: true, amount: 0.5 }}
-              className="flex items-center gap-4 p-4 pl-0 md:pl-10 rounded-3xl shadow=sm hover:bg-[#cecece] transition hover:cursor-pointer"
+              // className="flex items-center gap-4 p-4 pl-0 md:pl-10 rounded-3xl shadow=sm hover:bg-[#cecece] transition hover:cursor-pointer"
             >
               <img
                 src={song.image}
@@ -93,7 +91,7 @@ const SearchResults = () => {
                   {song.artist}
                 </p>
               </div>
-            </motion.div>
+            </AnimatedItem>
           ))}
         </div>
       )}
