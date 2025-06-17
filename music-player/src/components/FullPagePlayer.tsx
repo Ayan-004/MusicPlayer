@@ -10,9 +10,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ElasticSlider from "./ElasticSlider";
+import QueuePanel from "./QueuePanel";
+import { AnimatePresence } from "framer-motion";
+import { ListMusic } from "lucide-react";
 import { useEffect } from "react";
 
-const FullPagePlayer = () => {
+type FullPagePlayerProps = {
+  showQueue: boolean;
+  setShowQueue: (val: boolean) => void;
+};
+
+const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
   const {
     currentSong,
     showFullPlayer,
@@ -67,7 +75,7 @@ const FullPagePlayer = () => {
 
   return (
     <div
-      className={`fixed top-0 min-w-full xl:min-w-min xl:left-[230px] right-0 bottom-0 xl:rounded-l-4xl backdrop-blur-xl xl:backdrop-blur-2xl text-black z-50 p-6 flex flex-col items-center justify-center overflow-hidden transition-all duration-500 ease-in-out ${
+      className={`fixed top-0 min-w-full xl:min-w-min xl:left-[230px] right-0 bottom-0 xl:rounded-l-4xl backdrop-blur-xl xl:backdrop-blur-2xl text-black z-40 p-6 flex flex-col items-center justify-center overflow-hidden transition-all duration-500 ease-in-out ${
         showFullPlayer ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
       }`}
     >
@@ -77,6 +85,10 @@ const FullPagePlayer = () => {
       >
         <FontAwesomeIcon icon={faCircleXmark} />
       </button>
+
+      <AnimatePresence>
+        {showQueue && <QueuePanel onClose={() => setShowQueue(false)} />}
+      </AnimatePresence>
 
       <div className="flex flex-col items-center justify-center mt-9 space-y-3">
         <img
@@ -114,7 +126,7 @@ const FullPagePlayer = () => {
           </p>
         </div>
 
-        <div className="flex mt-3 text-xl xl:text-2xl 2xl:text-4xl">
+        <div className="flex mt-3 -mr-12 text-xl xl:text-2xl 2xl:text-3xl">
           <button className="text-gray-900 hover:text-black hover:scale-110 transition-all duration-500 ease-in-out cursor-pointer">
             <FontAwesomeIcon icon={faBackward} />
           </button>
@@ -124,7 +136,7 @@ const FullPagePlayer = () => {
               borderRadius: isPlaying ? "19px" : "50%",
               transition: "border-radius 0.3s ease-in-out",
             }}
-            className="w-14 h-14 2xl:w-20 2xl:h-20 mx-10 flex items-center justify-center bg-black text-white hover:cursor-pointer"
+            className="w-14 h-14 2xl:w-16 2xl:h-16 mx-10 flex items-center justify-center bg-black text-white hover:cursor-pointer"
           >
             <FontAwesomeIcon
               icon={isPlaying ? faPause : faPlay}
@@ -137,6 +149,12 @@ const FullPagePlayer = () => {
           </button>
           <button className="text-gray-900 hover:text-black hover:scale-110 transition-all duration-500 ease-in-out cursor-pointer">
             <FontAwesomeIcon icon={faForward} />
+          </button>
+          <button
+            onClick={() => setShowQueue(true)}
+            className="text-black hover:scale-110 transition-all cursor-pointer ml-6 xl:ml-8"
+          >
+            <ListMusic />
           </button>
         </div>
 

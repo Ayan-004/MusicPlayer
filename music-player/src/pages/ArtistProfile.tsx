@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useSong } from "../components/context/SongContext";
 import { AnimatedItem } from "../components/AnimateItem";
+import { ListPlus } from 'lucide-react'
+
 
 interface Song {
   title: string;
@@ -17,7 +19,7 @@ function decodeHTMLEntities(text: string): string {
 }
 
 function ArtistProfile() {
-  const { setCurrentSong } = useSong();
+  const { setCurrentSong, addToQueue } = useSong();
   const { artistName } = useParams();
   const location = useLocation();
   const passedImage = location.state?.artistImage;
@@ -117,14 +119,23 @@ function ArtistProfile() {
                   className="w-14 h-14 md:w-16 md:h-16 object-cover rounded-full"
                 />
               )}
-              <div>
-                <p className="text-sm md:text-md font-montserrat-medium">
+              <div className="flex flex-col min-w-0 max-w-xs md:max-w-md overflow-hidden">
+                <p className="text-sm md:text-md font-montserrat-medium truncate">
                   {song.title}
                 </p>
-                <p className="text-xs md:text-sm font-montserrat-medium text-[#979797]">
+                <p className="text-xs md:text-sm font-montserrat-medium truncate text-[#979797]">
                   {song.artist}
                 </p>
               </div>
+              <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                addToQueue(song)
+              }}
+              className="ml-auto -mr-9 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
+              >
+                <ListPlus />
+              </button>
             </AnimatedItem>
           ))}
         </div>

@@ -6,11 +6,14 @@ import BottomPlayer from "./BottomPlayer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import FullPagePlayer from "./FullPagePlayer";
+import QueuePanel from "./QueuePanel";
 import { useSong } from "./context/SongContext";
+import { AnimatePresence } from "framer-motion";
 
 const Layout = () => {
   const [collapsed, setCollapsed] = useState(window.innerWidth < 1440);
   const { showFullPlayer } = useSong();
+  const [showQueue, setShowQueue] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -24,8 +27,7 @@ const Layout = () => {
     window.addEventListener("resize", handleResize);
     handleResize();
 
-    return () => 
-      window.removeEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -42,7 +44,7 @@ const Layout = () => {
         className={`flex flex-col flex-1 bg-white shadow-2xl xl:rounded-l-4xl overflow-hidden xl:opacity-100 z-30 transition-all`}
       >
         <div className="flex-1 relative overflow-y-auto">
-          {collapsed && (
+          {collapsed && !showFullPlayer && (
             <button
               className="absolute top-6 left-4 md:left-11 z-50 text-2xl xl:hidden p-2 "
               onClick={() => setCollapsed(false)}
@@ -53,7 +55,17 @@ const Layout = () => {
           <NavBar />
           <Outlet />
           <BottomPlayer />
-          {showFullPlayer && <FullPagePlayer />}
+          {showFullPlayer && (
+            <FullPagePlayer showQueue={showQueue} setShowQueue={setShowQueue} />
+          )}
+
+          <AnimatePresence>
+            {showQueue && (
+              <div>
+                <QueuePanel onClose={() => setShowQueue(false)} />
+              </div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>
@@ -61,13 +73,3 @@ const Layout = () => {
 };
 
 export default Layout;
-
-{
-  /* <div className={`transition-all duration-500 ease-in-out ${collapsed ? 'w-[60px]' : 'w-[220px]'}`}></div> */
-}
-
-// sm:hidden fixed top-0 left-0 w-full bg-[#b4b4b4] flex items-center justify-between p-4 shadow-md z-50
-
-{
-  /* <div className="flex flex-col flex-1 bg-white shadow-2xl rounded-l-4xl overflow-hidden z-40"></div> */
-}
