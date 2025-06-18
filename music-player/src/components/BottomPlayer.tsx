@@ -1,4 +1,6 @@
 import { useSong } from "./context/SongContext";
+import { useState, useEffect, useRef } from "react";
+
 import {
   faBackward,
   faPlay,
@@ -19,6 +21,21 @@ const BottomPlayer = () => {
     duration,
     audioRef,
   } = useSong();
+
+    const titleRefs = useRef<(HTMLDivElement | null)>(null);
+    const artistRefs = useRef<(HTMLDivElement | null)>(null);
+    const [isTitleOverlfowing, setIsTitleOverlflowing] = useState(false);
+    const [isArtistsOverflowing, setIsArtistsOverlfowing] = useState(false);
+  
+    useEffect(() => {
+    if (!titleRefs.current || !artistRefs.current) return;
+      const newIsTitleOverflowing = titleRefs.current.scrollWidth > titleRefs.current.clientWidth;
+      
+      const newIsArtistsOverflowing = artistRefs.current.scrollWidth > artistRefs.current.clientWidth;
+
+    setIsTitleOverlflowing(newIsTitleOverflowing);
+    setIsArtistsOverlfowing(newIsArtistsOverflowing);
+  }, [currentSong]);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -59,7 +76,7 @@ const BottomPlayer = () => {
         <div className="flex items-center justify-between">
           <div
             onClick={() => setShowFullPlayer(true)}
-            className="flex items-center gap-4 md:gap-1"
+            className="flex items-center gap-4 md:gap-1 min-w-0"
           >
             {currentSong.image && (
               <img
@@ -68,26 +85,21 @@ const BottomPlayer = () => {
                 className="w-12 h-12 rounded-md object-cover"
               />
             )}
-            <div className="xs w-[130px] md:w-auto mr-2">
-              {/* {Mobile marquee} */}
-              <div className="block md:hidden">
-                <div className="marquee font-calsans mr-2 text-sm">
-                  <span>{currentSong.title}</span>
+            <div className="flex flex-col min-w-0 max-w-[130px] md:max-w-[250px] overflow-hidden lg:ml-3 hover:cursor-pointer">
+                <div
+                  ref={titleRefs}
+                  className={`text-sm font-montserrat-medium whitespace-nowrap overflow-hidden ${isTitleOverlfowing ? "marquee fade-marquee": "truncate"}`}
+                >
+                  {isTitleOverlfowing ? <span>{currentSong.title}</span> : currentSong.title}
                 </div>
-                <div className="marquee text-xs font-calsans mr-2 text-gray-700">
-                  <span>{currentSong.artist}</span>
-                </div>
-              </div>
-            </div>
 
-            {/* {Desktop: Static Text} */}
-            <div className="hidden md:block hover:cursor-pointer">
-              <p className="marquee font-montserrat-medium text-sm">
-                {currentSong.title}
-              </p>
-              <p className="marquee text-xs font-montserrat-medium text-gray-700">
-                {currentSong.artist}
-              </p>
+                <div
+                  ref={artistRefs}
+                  className={`text-xs font-montserrat-medium text-gray-500 whitespace-nowrap overflow-hidden ${isArtistsOverflowing ? "marquee fade-marquee": "truncate"}`}
+                >
+                  {isArtistsOverflowing ? <span>{currentSong.artist}</span> : currentSong.artist}
+                </div>
+              {/* </div> */}
             </div>
           </div>
 

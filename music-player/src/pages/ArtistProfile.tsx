@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useSong } from "../components/context/SongContext";
 import { AnimatedItem } from "../components/AnimateItem";
-import { ListPlus } from 'lucide-react'
-
+import { ListPlus } from "lucide-react";
 
 interface Song {
   title: string;
@@ -87,10 +86,14 @@ function ArtistProfile() {
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-4 border-black"></div>
-          <p className="text-cente font-montserrat-medium text-sm">
-            Loading songs...
+        <div className="flex flex-col items-center justify-center h-60 gap-3">
+          <div className="flex space-x-2">
+            <div className="w-3 h-3 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+            <div className="w-3 h-3 bg-black rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+            <div className="w-3 h-3 bg-black rounded-full animate-bounce"></div>
+          </div>
+          <p className="text-gray-600 font-montserrat-medium ml-3">
+            Loading...
           </p>
         </div>
       ) : songs.length === 0 ? (
@@ -127,12 +130,12 @@ function ArtistProfile() {
                   {song.artist}
                 </p>
               </div>
-              <button 
-              onClick={(e) => {
-                e.stopPropagation();
-                addToQueue(song)
-              }}
-              className="ml-auto -mr-9 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addToQueue(song);
+                }}
+                className="ml-auto -mr-9 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
               >
                 <ListPlus />
               </button>

@@ -11,7 +11,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ElasticSlider from "./ElasticSlider";
 import QueuePanel from "./QueuePanel";
-import { AnimatePresence } from "framer-motion";
+import { useIsMobile } from "../hooks/IsMobile";
+import { motion, AnimatePresence, easeOut, easeInOut } from "framer-motion";
 import { ListMusic } from "lucide-react";
 import { useEffect } from "react";
 
@@ -23,7 +24,6 @@ type FullPagePlayerProps = {
 const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
   const {
     currentSong,
-    showFullPlayer,
     setShowFullPlayer,
     isPlaying,
     setIsPlaying,
@@ -34,6 +34,9 @@ const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
     volume,
     setVolume,
   } = useSong();
+
+  const isMobile = useIsMobile();
+  const exitY = isMobile ? "2000vh" : "9000vh"
 
   useEffect(() => {
     if (currentSong && audioRef.current) {
@@ -71,13 +74,15 @@ const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
     return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
   };
 
-  if (!showFullPlayer || !currentSong) return null;
+  if (!currentSong) return null; 
 
   return (
-    <div
-      className={`fixed top-0 min-w-full xl:min-w-min xl:left-[230px] right-0 bottom-0 xl:rounded-l-4xl backdrop-blur-xl xl:backdrop-blur-2xl text-black z-40 p-6 flex flex-col items-center justify-center overflow-hidden transition-all duration-500 ease-in-out ${
-        showFullPlayer ? "opacity-100 translate-y-0" : "opacity-0 translate-y-64"
-      } `}
+    <motion.div
+    initial={{opacity: 0, y: 900}}
+    animate={{opacity: 1, y: 0}}
+    exit={{translateY: exitY , transition: {duration: 1, ease: easeInOut}}}
+    transition={{duration: 0.3, ease: "easeInOut"}}
+      className={`fixed top-0 min-w-full xl:min-w-min xl:left-[230px] right-0 bottom-0 xl:rounded-l-4xl backdrop-blur-xl xl:backdrop-blur-2xl text-black z-40 p-6 flex flex-col items-center justify-center overflow-hidden transition-all duration-500 ease-in-out`}
     >
       <button
         className="absolute top-10 right-10 text-3xl xl:text-4xl hover:cursor-pointer"
@@ -90,17 +95,22 @@ const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
         {showQueue && <QueuePanel onClose={() => setShowQueue(false)} />}
       </AnimatePresence>
 
-      <div className={`flex flex-col items-center justify-center mt-9 space-y-3 transition-all duration-500 ease-in-out ${showQueue ? "blur-sm scale-95 pointer-events-none" : "blur-0 scale-100"} `}>
+      <motion.div 
+      initial={{opacity: 0, scale: 0.95}}
+      animate={{opacity: 1, scale: 1}}
+      exit={{scale: 0.8, transition: {duration: 0.1, ease: easeInOut}}}
+      transition={{delay: 0.15, duration: 0.4, ease: easeOut}}
+      className={`flex flex-col items-center justify-center mt-9 space-y-3 transition-all duration-500 ease-in-out ${showQueue ? "blur-sm scale-95 pointer-events-none" : "blur-0 scale-100"} `}>
         <img
           src={currentSong.image}
           alt={currentSong.title}
           className="w-70 h-70 sm:w-50 sm:h-50 md:w-60 md:h-60 xl:w-80 xl:h-80 2xl:w-[350px] 2xl:h-[350px] rounded-4xl shadow-2xl "
         />
 
-        <h1 className="text-xl xl:text-xl 2xl:text-2xl text-center font-calsans">
+        <h1 className="text-xl xl:text-xl 2xl:text-2xl text-center font-montserrat-medium">
           {currentSong.title}
         </h1>
-        <p className="w-[340px] xl:w-[650px] -mt-2 text-center text-sm 2xl:text-[16px] text-wrap font-calsans text-gray-700">
+        <p className="w-[340px] xl:w-[650px] -mt-2 text-center text-sm 2xl:text-[16px] text-wrap font-montserrat-medium text-gray-500">
           {currentSong.artist}
         </p>
 
@@ -170,8 +180,8 @@ const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
           onChange={(val) => setVolume(val / 100)}
           className="mt-6 2xl:scale-125 2xl:mt-10"
         />
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

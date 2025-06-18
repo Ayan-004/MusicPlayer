@@ -12,11 +12,11 @@ const QueuePanel = ({ onClose }: Props) => {
 
     return (
         <motion.div
-        initial={{x: "100%"}}
-        animate={{ x: 0 }}
-        exit={{ x: "100%" }}
-        transition={{ type: "spring", stiffness: 150, damping: 20 }}
-        className="fixed right-0 top-0 h-full w-[90%] md:w-[400px] backdrop-blur-lg xl:backdrop-blur-3xl z-[100] shadow-2xl rounded-l-4xl border-l border-gray-300 p-5 overflow-y-auto"
+        initial={{ translateX: "100%"}}
+        animate={{ translateX: 0 }}
+        exit={{ translateX: "100%" }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="fixed right-0 top-0 h-full w-[90%] md:w-[400px] backdrop-blur-md xl:backdrop-blur-lg z-[100] rounded-l-4xl border-l border-gray-300 p-5 overflow-y-auto"
         >
             <div className="flex justify-between item-center mb-7">
                 <button onClick={clearQueue} className="text-xs bg-white/35 p-3 rounded-full font-montserrat-medium hover:cursor-pointer">

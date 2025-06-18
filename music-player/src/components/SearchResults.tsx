@@ -57,7 +57,14 @@ const SearchResults = () => {
         Search Result for "{query}"
       </h2>
       {loading ? (
-        <p>Loading...</p>
+        <div className="flex flex-col items-center justify-center h-60 gap-3">
+        <div className="flex space-x-2">
+          <div className="w-3 h-3 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+          <div className="w-3 h-3 bg-black rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+          <div className="w-3 h-3 bg-black rounded-full animate-bounce"></div>
+        </div>
+        <p className="text-gray-600 font-montserrat-medium ml-3">Loading...</p>
+      </div>
       ) : songs.length === 0 ? (
         <p className="flex justify-center font-montserrat-medium">
           😕No songs found.
