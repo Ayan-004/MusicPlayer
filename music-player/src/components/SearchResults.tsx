@@ -76,14 +76,13 @@ const SearchResults = () => {
                   url: song.url,
                 })
               }
-              // className="flex items-center gap-4 p-4 pl-0 md:pl-10 rounded-3xl shadow=sm hover:bg-[#cecece] transition hover:cursor-pointer"
             >
               <img
                 src={song.image}
                 alt={song.title}
                 className="w-14 h-14 md:w-16 md:h-16 rounded-full object-cover"
               />
-              <div className="w-56 lg:w-xl">
+              <div className="flex flex-col min-w-0 max-w-xs md:max-w-md overflow-hidden">
                 <p className="text-sm md:text-md font-montserrat-medium truncate">
                   {song.title}
                 </p>
@@ -96,7 +95,7 @@ const SearchResults = () => {
                 e.stopPropagation();
                 addToQueue(song)
               }}
-              className="ml-auto -mr-9 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
+              className="ml-auto -mr-3 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
               >
                 <ListPlus />
               </button>

@@ -71,10 +71,10 @@ const BottomPlayer = () => {
             <div className="xs w-[130px] md:w-auto mr-2">
               {/* {Mobile marquee} */}
               <div className="block md:hidden">
-                <div className="marquee font-montserrat-medium mr-2 text-sm">
+                <div className="marquee font-calsans mr-2 text-sm">
                   <span>{currentSong.title}</span>
                 </div>
-                <div className="marquee text-xs font-montserrat-medium mr-2 text-gray-700">
+                <div className="marquee text-xs font-calsans mr-2 text-gray-700">
                   <span>{currentSong.artist}</span>
                 </div>
               </div>
