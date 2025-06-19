@@ -1,11 +1,11 @@
-import AllRoute from "./routes/AllRoute"
+import AllRoute from "./routes/AllRoute";
 
-const App  = () => {
+const App = () => {
   return (
     <>
       <AllRoute />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

@@ -2,11 +2,6 @@ import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import { Link } from "react-router-dom";
 
-// interface CardItem {
-//     name: string;
-//     image: string;
-// }
-
 interface CardSliderProps {
   title?: string;
   items?: any[];

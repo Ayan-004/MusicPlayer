@@ -22,16 +22,18 @@ const BottomPlayer = () => {
     audioRef,
   } = useSong();
 
-    const titleRefs = useRef<(HTMLDivElement | null)>(null);
-    const artistRefs = useRef<(HTMLDivElement | null)>(null);
-    const [isTitleOverlfowing, setIsTitleOverlflowing] = useState(false);
-    const [isArtistsOverflowing, setIsArtistsOverlfowing] = useState(false);
-  
-    useEffect(() => {
+  const titleRefs = useRef<HTMLDivElement | null>(null);
+  const artistRefs = useRef<HTMLDivElement | null>(null);
+  const [isTitleOverlfowing, setIsTitleOverlflowing] = useState(false);
+  const [isArtistsOverflowing, setIsArtistsOverlfowing] = useState(false);
+
+  useEffect(() => {
     if (!titleRefs.current || !artistRefs.current) return;
-      const newIsTitleOverflowing = titleRefs.current.scrollWidth > titleRefs.current.clientWidth;
-      
-      const newIsArtistsOverflowing = artistRefs.current.scrollWidth > artistRefs.current.clientWidth;
+    const newIsTitleOverflowing =
+      titleRefs.current.scrollWidth > titleRefs.current.clientWidth;
+
+    const newIsArtistsOverflowing =
+      artistRefs.current.scrollWidth > artistRefs.current.clientWidth;
 
     setIsTitleOverlflowing(newIsTitleOverflowing);
     setIsArtistsOverlfowing(newIsArtistsOverflowing);
@@ -86,19 +88,31 @@ const BottomPlayer = () => {
               />
             )}
             <div className="flex flex-col min-w-0 max-w-[130px] md:max-w-[250px] overflow-hidden lg:ml-3 hover:cursor-pointer">
-                <div
-                  ref={titleRefs}
-                  className={`text-sm font-montserrat-medium whitespace-nowrap overflow-hidden ${isTitleOverlfowing ? "marquee fade-marquee": "truncate"}`}
-                >
-                  {isTitleOverlfowing ? <span>{currentSong.title}</span> : currentSong.title}
-                </div>
+              <div
+                ref={titleRefs}
+                className={`text-sm font-montserrat-medium whitespace-nowrap overflow-hidden ${
+                  isTitleOverlfowing ? "marquee fade-marquee" : "truncate"
+                }`}
+              >
+                {isTitleOverlfowing ? (
+                  <span>{currentSong.title}</span>
+                ) : (
+                  currentSong.title
+                )}
+              </div>
 
-                <div
-                  ref={artistRefs}
-                  className={`text-xs font-montserrat-medium text-gray-500 whitespace-nowrap overflow-hidden ${isArtistsOverflowing ? "marquee fade-marquee": "truncate"}`}
-                >
-                  {isArtistsOverflowing ? <span>{currentSong.artist}</span> : currentSong.artist}
-                </div>
+              <div
+                ref={artistRefs}
+                className={`text-xs font-montserrat-medium text-gray-500 whitespace-nowrap overflow-hidden ${
+                  isArtistsOverflowing ? "marquee fade-marquee" : "truncate"
+                }`}
+              >
+                {isArtistsOverflowing ? (
+                  <span>{currentSong.artist}</span>
+                ) : (
+                  currentSong.artist
+                )}
+              </div>
               {/* </div> */}
             </div>
           </div>

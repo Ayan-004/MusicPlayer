@@ -124,13 +124,15 @@ function SongPreview() {
 
       {isLoading ? (
         <div className="flex flex-col items-center justify-center h-60 gap-3">
-        <div className="flex space-x-2">
-          <div className="w-3 h-3 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-          <div className="w-3 h-3 bg-black rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-          <div className="w-3 h-3 bg-black rounded-full animate-bounce"></div>
+          <div className="flex space-x-2">
+            <div className="w-3 h-3 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+            <div className="w-3 h-3 bg-black rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+            <div className="w-3 h-3 bg-black rounded-full animate-bounce"></div>
+          </div>
+          <p className="text-gray-600 font-montserrat-medium ml-3">
+            Loading...
+          </p>
         </div>
-        <p className="text-gray-600 font-montserrat-medium ml-3">Loading...</p>
-      </div>
       ) : (
         <Swiper
           modules={[Navigation]}
@@ -155,21 +157,33 @@ function SongPreview() {
                   }}
                 />
                 <div
-                    ref={(el) => {
-                        (titleRefs.current[index] = el)
-                    }}
-                    className={`w-40 text-xs pt-5 font-montserrat-medium text-center truncate ${ overflowingTitles[index] ? 'marquee fade-marquee' : '' }`}
+                  ref={(el) => {
+                    titleRefs.current[index] = el;
+                  }}
+                  className={`w-40 text-xs pt-5 font-montserrat-medium text-center truncate ${
+                    overflowingTitles[index] ? "marquee fade-marquee" : ""
+                  }`}
                 >
-                    {overflowingTitles[index] ? <span>{items.trackName}</span> : items.trackName}
+                  {overflowingTitles[index] ? (
+                    <span>{items.trackName}</span>
+                  ) : (
+                    items.trackName
+                  )}
                 </div>
 
                 <div
-                    ref={(el) => {
-                        (artistRefs.current[index] = el)
-                    }}
-                    className={`w-40 text-xs pt-1 text-[#979797] font-montserrat-medium text-center truncate ${ overflowingArtists[index] ? 'marquee fade-marquee' : '' }`}
+                  ref={(el) => {
+                    artistRefs.current[index] = el;
+                  }}
+                  className={`w-40 text-xs pt-1 text-[#979797] font-montserrat-medium text-center truncate ${
+                    overflowingArtists[index] ? "marquee fade-marquee" : ""
+                  }`}
                 >
-                    {overflowingArtists[index] ? <span>{items.artistName}</span> : items.artistName}
+                  {overflowingArtists[index] ? (
+                    <span>{items.artistName}</span>
+                  ) : (
+                    items.artistName
+                  )}
                 </div>
 
                 {items.previewUrl ? (

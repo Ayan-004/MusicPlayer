@@ -14,6 +14,6 @@ const AllRoute = () => {
       </Route>
     </Routes>
   );
-}
+};
 
 export default AllRoute;

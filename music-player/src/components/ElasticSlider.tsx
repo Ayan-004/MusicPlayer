@@ -17,7 +17,7 @@ interface ElasticSliderProps {
   stepSize?: number;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
-  value: number,
+  value: number;
   onChange?: (value: number) => void;
 }
 
@@ -57,7 +57,7 @@ interface SliderProps {
   stepSize: number;
   leftIcon: React.ReactNode;
   rightIcon: React.ReactNode;
-  value: number,
+  value: number;
   onChange?: (value: number) => void;
 }
 
@@ -69,7 +69,7 @@ const Slider: React.FC<SliderProps> = ({
   leftIcon,
   rightIcon,
   value,
-  onChange
+  onChange,
 }) => {
   const sliderRef = useRef<HTMLDivElement>(null);
   const [region, setRegion] = useState<"left" | "middle" | "right">("middle");
@@ -78,8 +78,8 @@ const Slider: React.FC<SliderProps> = ({
   const scale = useMotionValue(1);
 
   useEffect(() => {
-    onChange?.(value)
-  }, [value])
+    onChange?.(value);
+  }, [value]);
 
   useMotionValueEvent(clientX, "change", (latest: number) => {
     if (sliderRef.current) {

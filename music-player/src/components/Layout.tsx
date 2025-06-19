@@ -56,9 +56,12 @@ const Layout = () => {
           <Outlet />
           <BottomPlayer />
           <AnimatePresence mode="wait">
-          {showFullPlayer && (
-            <FullPagePlayer showQueue={showQueue} setShowQueue={setShowQueue} />
-          )}
+            {showFullPlayer && (
+              <FullPagePlayer
+                showQueue={showQueue}
+                setShowQueue={setShowQueue}
+              />
+            )}
           </AnimatePresence>
 
           <AnimatePresence>
