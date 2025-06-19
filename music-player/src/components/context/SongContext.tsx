@@ -67,7 +67,7 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
     setQueue((prev) => [...prev, song]);
 
     if("vibrate" in navigator) {
-      navigator.vibrate(100);
+      navigator.vibrate([50]);
     }
   };
 

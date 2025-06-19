@@ -211,7 +211,13 @@ const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
           maxValue={100}
           isStepped
           stepSize={1}
-          onChange={(val) => setVolume(val / 100)}
+          onChange={(val) => {
+            setVolume(val / 100)
+          
+            if("vibrate" in navigator) {
+              navigator.vibrate(10);
+            }
+          }}
           className="mt-6 2xl:scale-125 2xl:mt-10"
         />
       </motion.div>
