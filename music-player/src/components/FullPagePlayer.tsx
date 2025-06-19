@@ -80,7 +80,7 @@ const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
     <motion.div
     initial={{opacity: 0, y: 900}}
     animate={{opacity: 1, y: 0}}
-    exit={{translateY: exitY , transition: {duration: 1, ease: easeInOut}}}
+    exit={{translateY: exitY , transition: {duration: 0.5, ease: easeInOut}}}
     transition={{duration: 0.3, ease: "easeInOut"}}
       className={`fixed top-0 min-w-full xl:min-w-min xl:left-[230px] right-0 bottom-0 xl:rounded-l-4xl backdrop-blur-xl xl:backdrop-blur-2xl text-black z-40 p-6 flex flex-col items-center justify-center overflow-hidden transition-all duration-500 ease-in-out`}
     >
