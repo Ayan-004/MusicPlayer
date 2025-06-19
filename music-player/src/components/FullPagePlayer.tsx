@@ -14,7 +14,7 @@ import QueuePanel from "./QueuePanel";
 import { useIsMobile } from "../hooks/IsMobile";
 import { motion, AnimatePresence, easeOut, easeInOut } from "framer-motion";
 import { ListMusic } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type FullPagePlayerProps = {
   showQueue: boolean;
@@ -38,6 +38,12 @@ const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
   const isMobile = useIsMobile();
   const exitY = isMobile ? "2000vh" : "9000vh"
 
+    const titleRefs = useRef<(HTMLDivElement | null)>(null);
+    const artistRefs = useRef<(HTMLDivElement | null)>(null);
+    const [isTitleOverfowing, setIsTitleOverflowing] = useState(false);
+    const [isArtistsOverflowing, setIsArtistsOverfowing] = useState(false);
+  
+
   useEffect(() => {
     if (currentSong && audioRef.current) {
       // audioRef.current.load();
@@ -49,6 +55,17 @@ const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
       }
     }
   }, [currentSong]);
+
+    useEffect(() => {
+    if (!titleRefs.current || !artistRefs.current) return;
+      const newIsTitleOverflowing = titleRefs.current.scrollWidth > titleRefs.current.clientWidth;
+      
+      const newIsArtistsOverflowing = artistRefs.current.scrollWidth > artistRefs.current.clientWidth;
+
+    setIsTitleOverflowing(newIsTitleOverflowing);
+    setIsArtistsOverfowing(newIsArtistsOverflowing);
+  }, [currentSong]);
+
 
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -107,12 +124,29 @@ const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
           className="w-70 h-70 sm:w-50 sm:h-50 md:w-60 md:h-60 xl:w-80 xl:h-80 2xl:w-[350px] 2xl:h-[350px] rounded-4xl shadow-2xl "
         />
 
-        <h1 className="text-xl xl:text-xl 2xl:text-2xl text-center font-montserrat-medium">
+        <div className="flex flex-col min-w-0 max-w-[200px] md:max-w-[330px] overflow-hidden hover:cursor-pointer">
+                <div
+                  ref={titleRefs}
+                  className={`text-xl xl:text-xl 2xl:text-2xl text-center font-montserrat-medium ${isTitleOverfowing ? "marquee fade-marquee": "truncate"}`}
+                >
+                  {isTitleOverfowing ? <span>{currentSong.title}</span> : currentSong.title}
+                </div>
+
+                <div
+                  ref={artistRefs}
+                  className={`text-sm 2xl:text-[16px] mt-1 text-center font-montserrat-medium text-gray-500 ${isArtistsOverflowing ? "marquee fade-marquee": "truncate"}`}
+                >
+                  {isArtistsOverflowing ? <span>{currentSong.artist}</span> : currentSong.artist}
+                </div>
+              {/* </div> */}
+            </div>
+
+        {/* <h1 className="text-xl xl:text-xl 2xl:text-2xl text-center font-montserrat-medium">
           {currentSong.title}
         </h1>
         <p className="w-[340px] xl:w-[650px] -mt-2 text-center text-sm 2xl:text-[16px] text-wrap font-montserrat-medium text-gray-500">
           {currentSong.artist}
-        </p>
+        </p> */}
 
         <div className="flex items-center justify-between mt-2">
           <p className="w-10 text-sm 2xl:w-16 2xl:text-xl font-montserrat-medium text-gray-700">
