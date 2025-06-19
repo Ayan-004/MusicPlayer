@@ -65,6 +65,10 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
 
   const addToQueue = (song: Song) => {
     setQueue((prev) => [...prev, song]);
+
+    if("vibrate" in navigator) {
+      navigator.vibrate(40);
+    }
   };
 
   const removeFromQueue = (index: number) => {
