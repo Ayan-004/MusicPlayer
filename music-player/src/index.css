@@ -184,3 +184,18 @@ input[type="range"].progress-bar::-moz-range-thumb {
     }
   }
 }
+
+@layer base {
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: env(safe-area-inset-top);
+    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 50;
+    pointer-events: none;
+  }
+}
