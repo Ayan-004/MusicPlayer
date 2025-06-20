@@ -184,30 +184,3 @@ input[type="range"].progress-bar::-moz-range-thumb {
     }
   }
 }
-
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background: #ffffff;
-}
-
-body {
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-  box-sizing: border-box;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: env(safe-area-inset-top);
-  backdrop-filter: blur(10px);
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 9999;
-  pointer-events: none;
-}

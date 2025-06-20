@@ -3,8 +3,8 @@
     "short_name": "Audizi",
     "start_url": "/",
     "display": "standalone",
-    "background": "transparent",
-    "theme_color": "transparent",
+    "background": "#ffffff",
+    "theme_color": "#ffffff",
     "icons": [
         {
             "src": "/logo.png",

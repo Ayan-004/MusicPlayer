@@ -43,7 +43,7 @@ const Layout = () => {
       <div
         className={`flex flex-col flex-1 bg-white shadow-2xl xl:rounded-l-4xl overflow-hidden xl:opacity-100 z-30 transition-all`}
       >
-        <div className="flex-1 relative overflow-y-auto pt-[env(safe-area-inset-top)]">
+        <div className="flex-1 relative overflow-y-auto">
           {collapsed && !showFullPlayer && (
             <button
               className="absolute top-6 left-4 md:left-11 z-50 text-2xl xl:hidden p-2 "
