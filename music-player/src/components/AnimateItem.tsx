@@ -31,10 +31,11 @@ const AnimatedItem: React.FC<AnimatedItemProps> = ({
       data-index={index}
       onMouseEnter={onMouseEnter}
       onClick={onClick}
+      whileTap={{ scale: 0.98 }}
       initial={{ scale: 0.7, opacity: 0 }}
       animate={inView ? { scale: 1, opacity: 1 } : { scale: 0.7, opacity: 0 }}
       transition={{ duration: 0.2, delay }}
-      className="flex items-center w-full gap-4 p-4 pl-0 md:pl-10 rounded-3xl shadow=sm hover:bg-[#cecece] hover:cursor-pointer"
+      className="flex items-center w-full gap-4 p-4 pl-0 md:pl-10 rounded-3xl hover:bg-[#cecece] hover:cursor-pointer"
     >
       {children}
     </motion.div>

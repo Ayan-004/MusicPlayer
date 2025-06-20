@@ -29,6 +29,7 @@ const SearchResults = () => {
     if (!query) return;
 
     setLoading(true);
+    console.log("Api called with query:", query);
     fetch(
       `https://saavn.dev/api/search/songs?query=${encodeURIComponent(
         query
@@ -37,10 +38,12 @@ const SearchResults = () => {
       .then((res) => res.json())
       .then((data) => {
         const results = data?.data?.results || [];
+        
         const formatted = results.map((song: any) => ({
           title: decodeHTMLEntities(song.name || song.title),
           artist:
-            song.artists?.primary?.map((a: any) => a.name).join(", ") ||
+          decodeHTMLEntities(
+            song.artists?.primary?.map((a: any) => a.name).join(", ") )||
             "Unknown",
           image: song.image?.[2].url || "",
           url:

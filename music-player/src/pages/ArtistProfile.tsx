@@ -55,8 +55,9 @@ function ArtistProfile() {
             ),
             image: song.image?.[2]?.url || "",
             artist:
-              song.artists?.primary?.map((a: any) => a.name).join(",") ||
-              "Unknown Artist",
+              decodeHTMLEntities(
+                song.artists?.primary?.map((a: any) => a.name).join(",")
+              ) || "Unknown Artist",
             url:
               song.downloadUrl?.find((d: any) => d.quality === "320kbps")
                 ?.url || "",
@@ -101,7 +102,7 @@ function ArtistProfile() {
           😕 Couldn't find songs by {artistName}. Try again later
         </p>
       ) : (
-        <div className="flex flex-col gap-2 bg-[#efefef] p-10 rounded-4xl m-3 md:m-6 mb-56 md:pb-24">
+        <div className="flex flex-col gap-2 bg-[#efefef] p-10 rounded-4xl m-3 md:m-6 mb-56 md:mb-36">
           {songs.map((song, index) => (
             <AnimatedItem
               key={index}
@@ -113,6 +114,7 @@ function ArtistProfile() {
                   image: song.image,
                   url: song.url,
                 })
+                
               }
             >
               {song.image?.trim() && (
