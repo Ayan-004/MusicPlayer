@@ -2,7 +2,7 @@
     "name": "Audizi",
     "short_name": "Audizi",
     "start_url": "/",
-    "display": "fullscreen",
+    "display": "standalone",
     "background": "transparent",
     "theme_color": "transparent",
     "icons": [
