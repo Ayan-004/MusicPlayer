@@ -1,21 +1,53 @@
-import CryptoJS from 'crypto-js';
+import CryptoJS from "crypto-js";
 
-export const decryptUrl = (encryptedUrl: string) => {
-  if(!encryptedUrl || encryptedUrl.length % 4 !== 0) {
-    console.warn("Invalid encrypted URL", encryptedUrl);
-  }
+export function decryptUrl(
+  encryptedUrl: string,
+  key: string = import.meta.env.VITE_DECRYPT_KEY
+): string | null {
   try {
-    const key = CryptoJS.enc.Utf8.parse(import.meta.env.VITE_DECRYPT_KEY);
-    const decrypted = CryptoJS.DES.decrypt(encryptedUrl, key, {
+    const keyHex = CryptoJS.enc.Utf8.parse(key);
+
+    const cipherParams = CryptoJS.lib.CipherParams.create({
+      ciphertext: CryptoJS.enc.Base64.parse(encryptedUrl),
+    });
+
+    const decrypted = CryptoJS.DES.decrypt(cipherParams, keyHex, {
       mode: CryptoJS.mode.ECB,
       padding: CryptoJS.pad.Pkcs7,
     });
 
-    const url = decrypted.toString(CryptoJS.enc.Utf8);
-    return url;
-    
+    const final = decrypted.toString(CryptoJS.enc.Utf8);
+    return final || null;
   } catch (error) {
     console.error("Decryption error:", error);
-    return ""
+    return null;
   }
-};
+}
+
+
+// import CryptoJS from 'crypto-js';
+
+// export const decryptUrl = (encryptedUrl: string) => {
+//   try {
+//     const key = CryptoJS.enc.Utf8.parse(import.meta.env.VITE_DECRYPT_KEY);
+//     const decrypted = CryptoJS.DES.decrypt(
+//       encryptedUrl, 
+//       key, {
+//       mode: CryptoJS.mode.ECB,
+//       padding: CryptoJS.pad.Pkcs7,
+//     });
+
+//     const decoded = decrypted.toString(CryptoJS.enc.Utf8)
+
+//     if(!decoded || decoded.length === 0) {
+//       console.warn("Decryption returned empty string")
+//       return null;
+//     }
+
+//     return decoded;
+    
+//   } catch (error) {
+//     console.error("Decryption error:", error);
+//     return ""
+//   }
+// };

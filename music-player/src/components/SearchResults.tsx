@@ -69,8 +69,10 @@ const SearchResults = () => {
           const artist = decodeHTMLEntities(artistRaw).trim() || "Unknown";
           let image = song.image || "";
           image = image.replace(/150x150/, "500x500");
-          image = image.replace(/^http:\/\//, 'https://')
-          const encryptedUrl = song.more_info?.encrypted_media_url || "";
+          image = image.replace(/^http:\/\//, "https://");
+          const encryptedUrl = decodeURIComponent(
+            song.more_info?.encrypted_media_url || ""
+          );
 
           return {
             title,
@@ -91,25 +93,19 @@ const SearchResults = () => {
   const galibCache = new Map<string, any>();
 
   const handlePlaySong = async (song: Song) => {
-     if(!song.encryptedUrl || song.encryptedUrl.length < 20) {
-      console.warn("Invalid encrypted URL in production", song.encryptedUrl);
+    const finalUrl = decryptUrl(song.encryptedUrl);
+    if (!finalUrl) {
+      console.warn("Invalid decryption result for:", song.title);
       return;
     }
 
-    let finalUrl = "";
-    try {
-      finalUrl = decryptUrl(song.encryptedUrl);
-      if(!finalUrl) throw new Error("Decryption failed: empty result")
-    } catch (error) {
-      console.error("Decryption error:", error)
-    }
     setCurrentSong({
       title: song.title,
       artist: song.artist,
       image: song.image,
       url: finalUrl,
     });
-    
+
     try {
       if (!galibCache.has(song.encryptedUrl)) {
         const response = await fetch(
@@ -121,17 +117,17 @@ const SearchResults = () => {
         galibCache.set(song.encryptedUrl, data);
       }
 
-      const details = Object.values(galibCache.get(song.encryptedUrl))[0] as {
-        song?: string;
-        primary_artists?: string;
-        singers?: string;
-        image?: string;
-        "320kbps"?: string;
-      };
+      // const details = Object.values(galibCache.get(song.encryptedUrl))[0] as {
+      //   song?: string;
+      //   primary_artists?: string;
+      //   singers?: string;
+      //   image?: string;
+      //   "320kbps"?: string;
+      // };
 
-      if (details["320kbps"]) {
-        finalUrl = details["320kbps"];
-      }
+      // if (details["320kbps"]) {
+      //   finalUrl = details["320kbps"];
+      // }
     } catch (error) {
       console.error("Playback Error:", error);
     }
@@ -181,16 +177,27 @@ const SearchResults = () => {
               <button
                 onClick={async (e) => {
                   e.stopPropagation();
-                  try {
-                    let finalUrl = decryptUrl(song.encryptedUrl);
+                  const finalUrl = decryptUrl(song.encryptedUrl);
+                  if (!finalUrl) {
+                    console.warn("Invalid decryption result for:", song.title);
+                    return;
+                  }
 
+                  setCurrentSong({
+                    title: song.title,
+                    artist: song.artist,
+                    image: song.image,
+                    url: finalUrl,
+                  });
+
+                  try {
                     if (!galibCache.has(song.encryptedUrl)) {
-                      const res = await fetch(
+                      const response = await fetch(
                         `https://stillkonfuzed.com/Music/Galib.php?play=${encodeURIComponent(
                           song.encryptedUrl
                         )}`
                       );
-                      const data = await res.json();
+                      const data = await response.json();
                       galibCache.set(song.encryptedUrl, data);
                     }
 
@@ -204,9 +211,9 @@ const SearchResults = () => {
                       "320kbps"?: string;
                     };
 
-                    if (details["320kbps"]) {
-                      finalUrl = details["320kbps"];
-                    }
+                    // if (details["320kbps"]) {
+                    //   finalUrl = details["320kbps"];
+                    // }
 
                     addToQueue({
                       title: details.song || song.title,

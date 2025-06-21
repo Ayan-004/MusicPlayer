@@ -61,7 +61,7 @@ function ArtistProfile() {
             title: decodeHTMLEntities(song.title || ""),
             artist: decodeHTMLEntities(song.subtitle || ""),
             image: image || null,
-            encryptedUrl: song.more_info?.encrypted_media_url || "",
+            encryptedUrl: decodeURIComponent(song.more_info?.encrypted_media_url || ""),
           };
         });
         setArtistImage(passedImage);
@@ -79,24 +79,20 @@ function ArtistProfile() {
   }, [name]);
 
   useEffect(() => {
-    if(process.env.NODE_ENV === "production") {
-      console.log("🔍 Encrypted URL samples:", songs.map((s) => s.encryptedUrl));
-      
+    if (process.env.NODE_ENV === "production") {
+      songs.forEach((s, i) => {
+        console.log(
+          `Songs ${i}: Encrypted URL length = ${s.encryptedUrl.length}`
+        );
+      });
     }
-  }, [songs])
+  }, [songs]);
 
   const handlePlay = async (song: Song) => {
-    if (!song.encryptedUrl || song.encryptedUrl.length < 20) {
-      console.warn("Invalid encrypted URL in production", song.encryptedUrl);
+    const finalUrl = decryptUrl(song.encryptedUrl);
+    if (!finalUrl) {
+      console.warn("Invalid decryption result for:", song.title);
       return;
-    }
-
-    let finalUrl = "";
-    try {
-      finalUrl = decryptUrl(song.encryptedUrl);
-      if (!finalUrl) throw new Error("Decryption failed: empty result");
-    } catch (error) {
-      console.error("Decryption error:", error);
     }
 
     setCurrentSong({
@@ -168,21 +164,13 @@ function ArtistProfile() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (!song.encryptedUrl || song.encryptedUrl.length < 20) {
+                      const finalUrl = decryptUrl(song.encryptedUrl);
+                      if (!finalUrl) {
                         console.warn(
-                          "Invalid encrypted URL in production",
-                          song.encryptedUrl
+                          "Invalid decryption result for:",
+                          song.title
                         );
                         return;
-                      }
-
-                      let finalUrl = "";
-                      try {
-                        finalUrl = decryptUrl(song.encryptedUrl);
-                        if (!finalUrl)
-                          throw new Error("Decryption failed: empty result");
-                      } catch (error) {
-                        console.error("Decryption error:", error);
                       }
 
                       addToQueue({
