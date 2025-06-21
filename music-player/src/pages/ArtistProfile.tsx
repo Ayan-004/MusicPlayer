@@ -53,12 +53,17 @@ function ArtistProfile() {
         const data = JSON.parse(jsonText);        
         
         const results = data?.results || [];
-        const formattedSongs: Song[] = results.map((song: any) => ({
+        const formattedSongs: Song[] = results.map((song: any) => {
+          let image = song.image || "";
+          image = image.replace(/150x150/, "500x500");
+          image = image.replace(/^http:\/\//, 'https://')
+          return{
           title: decodeHTMLEntities(song.title || ""),
           artist: decodeHTMLEntities(song.subtitle || ""),
-          image: song.image?.replace("150x150", "500x500") || null,
+          image: image || null,
           encryptedUrl: song.more_info?.encrypted_media_url || "",
-        }));
+          }
+        });
           setArtistImage(passedImage);
 
         setSongs(formattedSongs);
@@ -78,7 +83,7 @@ function ArtistProfile() {
   const handlePlay = async(song: Song) => {
     const finalUrl = decryptUrl(song.encryptedUrl)
     if(!finalUrl) return;
-    
+
     setCurrentSong({
       title: song.title,
       artist: song.artist,

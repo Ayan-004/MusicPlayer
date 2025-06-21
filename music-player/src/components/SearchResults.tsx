@@ -69,6 +69,7 @@ const SearchResults = () => {
           const artist = decodeHTMLEntities(artistRaw).trim() || "Unknown";
           let image = song.image || "";
           image = image.replace(/150x150/, "500x500");
+          image = image.replace(/^http:\/\//, 'https://')
           const encryptedUrl = song.more_info?.encrypted_media_url || "";
 
           return {
