@@ -1,4 +1,4 @@
-import CryptoJS, { enc } from 'crypto-js';
+import CryptoJS from 'crypto-js';
 
 export const decryptUrl = (encryptedUrl: string) => {
   try {
