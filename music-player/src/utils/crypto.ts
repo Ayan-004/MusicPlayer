@@ -5,6 +5,7 @@ export const decryptUrl = (encryptedUrl: string): string | null => {
     if (!encryptedUrl) return null;
 
     const key = import.meta.env.VITE_DECRYPT_KEY;
+      console.log("Decryption key:", key); 
     if (!key) {
       console.error("Decryption key is missing.");
       return null;
