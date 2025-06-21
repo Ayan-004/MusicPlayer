@@ -92,6 +92,7 @@ const SearchResults = () => {
   const handlePlaySong = async (song: Song) => {
     try {
       let finalUrl = decryptUrl(song.encryptedUrl);
+      if(!finalUrl) return;
       setCurrentSong({
         title: song.title,
         artist: song.artist,

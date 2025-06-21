@@ -77,7 +77,8 @@ function ArtistProfile() {
 
   const handlePlay = async(song: Song) => {
     const finalUrl = decryptUrl(song.encryptedUrl)
-
+    if(!finalUrl) return;
+    
     setCurrentSong({
       title: song.title,
       artist: song.artist,
