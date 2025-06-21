@@ -1,16 +1,29 @@
 import CryptoJS from "crypto-js";
 
-export const decryptUrl = (encryptedUrl: string) => {
+export const decryptUrl = (encryptedUrl: string): string | null => {
   try {
+    if (!encryptedUrl) return null;
+
     const key = import.meta.env.VITE_DECRYPT_KEY;
+    if (!key) {
+      console.error("Decryption key is missing.");
+      return null;
+    }
+
     const decrypted = CryptoJS.AES.decrypt(encryptedUrl, key);
     const result = decrypted.toString(CryptoJS.enc.Utf8);
+
+    if (!result || !result.startsWith("http")) {
+      return null; // Filter out bad decryptions
+    }
+
     return result;
   } catch (error) {
     console.error("Decryption failed:", error);
     return null;
   }
 };
+
 
 
 
