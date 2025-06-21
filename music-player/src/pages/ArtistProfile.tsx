@@ -57,11 +57,12 @@ function ArtistProfile() {
           let image = song.image || "";
           image = image.replace(/150x150/, "500x500");
           image = image.replace(/^http:\/\//, "https://");
+          console.log("Encrypted URL:", song.more_info?.encrypted_media_url);
           return {
             title: decodeHTMLEntities(song.title || ""),
             artist: decodeHTMLEntities(song.subtitle || ""),
             image: image || null,
-            encryptedUrl: decodeURIComponent(song.more_info?.encrypted_media_url || ""),
+            encryptedUrl: song.more_info?.encrypted_media_url || "",
           };
         });
         setArtistImage(passedImage);
@@ -94,6 +95,10 @@ function ArtistProfile() {
       console.warn("Invalid decryption result for:", song.title);
       return;
     }
+
+    console.log("Encrypted:", song.encryptedUrl);
+    console.log("Decoded:", decodeURIComponent(song.encryptedUrl));
+    console.log("Decrypted:", finalUrl);
 
     setCurrentSong({
       title: song.title,
@@ -164,7 +169,9 @@ function ArtistProfile() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      const finalUrl = decryptUrl(decodeURIComponent(song.encryptedUrl));
+                      const finalUrl = decryptUrl(
+                        decodeURIComponent(song.encryptedUrl)
+                      );
                       if (!finalUrl) {
                         console.warn(
                           "Invalid decryption result for:",

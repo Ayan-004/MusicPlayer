@@ -70,9 +70,7 @@ const SearchResults = () => {
           let image = song.image || "";
           image = image.replace(/150x150/, "500x500");
           image = image.replace(/^http:\/\//, "https://");
-          const encryptedUrl = decodeURIComponent(
-            song.more_info?.encrypted_media_url || ""
-          );
+          const encryptedUrl = song.more_info?.encrypted_media_url || "";
 
           return {
             title,
