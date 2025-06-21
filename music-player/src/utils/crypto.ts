@@ -17,12 +17,19 @@ export function decryptUrl(
     });
 
     const final = decrypted.toString(CryptoJS.enc.Utf8);
-    return final || null;
+
+    if (!final || final.length < 10) {
+      console.warn("Decryption resulted in short/invalid string:", final);
+      return null;
+    }
+
+    return final;
   } catch (error) {
     console.error("Decryption error:", error);
     return null;
   }
 }
+
 
 
 // import CryptoJS from 'crypto-js';
