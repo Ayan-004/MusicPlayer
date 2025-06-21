@@ -96,9 +96,7 @@ function ArtistProfile() {
       return;
     }
 
-    console.log("Encrypted:", song.encryptedUrl);
-    console.log("Decoded:", decodeURIComponent(song.encryptedUrl));
-    console.log("Decrypted:", finalUrl);
+console.log("Decrypted URL for", song.title, ":", finalUrl);
 
     setCurrentSong({
       title: song.title,

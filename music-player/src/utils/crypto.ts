@@ -1,28 +1,17 @@
 import CryptoJS from "crypto-js";
 
-export function decryptUrl(
-  encryptedUrl: string,
-  key: string = import.meta.env.VITE_DECRYPT_KEY
-): string | null {
+export const decryptUrl = (encryptedUrl: string) => {
   try {
-    const keyHex = CryptoJS.enc.Utf8.parse(key);
-
-    const cipherParams = CryptoJS.lib.CipherParams.create({
-      ciphertext: CryptoJS.enc.Base64.parse(encryptedUrl),
-    });
-
-    const decrypted = CryptoJS.DES.decrypt(cipherParams, keyHex, {
-      mode: CryptoJS.mode.ECB,
-      padding: CryptoJS.pad.Pkcs7,
-    });
-
-    const final = decrypted.toString(CryptoJS.enc.Utf8);
-    return final || null;
+    const key = import.meta.env.VITE_DECRYPT_KEY;
+    const decrypted = CryptoJS.AES.decrypt(encryptedUrl, key);
+    const result = decrypted.toString(CryptoJS.enc.Utf8);
+    return result;
   } catch (error) {
-    console.error("Decryption error:", error);
+    console.error("Decryption failed:", error);
     return null;
   }
-}
+};
+
 
 
 
