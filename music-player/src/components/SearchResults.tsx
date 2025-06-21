@@ -91,16 +91,26 @@ const SearchResults = () => {
   const galibCache = new Map<string, any>();
 
   const handlePlaySong = async (song: Song) => {
-    try {
-      let finalUrl = decryptUrl(song.encryptedUrl);
-      if(!finalUrl) return;
-      setCurrentSong({
-        title: song.title,
-        artist: song.artist,
-        image: song.image,
-        url: finalUrl,
-      });
+     if(!song.encryptedUrl || song.encryptedUrl.length < 20) {
+      console.warn("Invalid encrypted URL in production", song.encryptedUrl);
+      return;
+    }
 
+    let finalUrl = "";
+    try {
+      finalUrl = decryptUrl(song.encryptedUrl);
+      if(!finalUrl) throw new Error("Decryption failed: empty result")
+    } catch (error) {
+      console.error("Decryption error:", error)
+    }
+    setCurrentSong({
+      title: song.title,
+      artist: song.artist,
+      image: song.image,
+      url: finalUrl,
+    });
+    
+    try {
       if (!galibCache.has(song.encryptedUrl)) {
         const response = await fetch(
           `https://stillkonfuzed.com/Music/Galib.php?play=${encodeURIComponent(
