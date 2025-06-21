@@ -89,7 +89,7 @@ function ArtistProfile() {
   }, [songs]);
 
   const handlePlay = async (song: Song) => {
-    const finalUrl = decryptUrl(song.encryptedUrl);
+    const finalUrl = decryptUrl(decodeURIComponent(song.encryptedUrl));
     if (!finalUrl) {
       console.warn("Invalid decryption result for:", song.title);
       return;
@@ -164,7 +164,7 @@ function ArtistProfile() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      const finalUrl = decryptUrl(song.encryptedUrl);
+                      const finalUrl = decryptUrl(decodeURIComponent(song.encryptedUrl));
                       if (!finalUrl) {
                         console.warn(
                           "Invalid decryption result for:",

@@ -93,7 +93,7 @@ const SearchResults = () => {
   const galibCache = new Map<string, any>();
 
   const handlePlaySong = async (song: Song) => {
-    const finalUrl = decryptUrl(song.encryptedUrl);
+    const finalUrl = decryptUrl(decodeURIComponent(song.encryptedUrl));
     if (!finalUrl) {
       console.warn("Invalid decryption result for:", song.title);
       return;
@@ -177,7 +177,7 @@ const SearchResults = () => {
               <button
                 onClick={async (e) => {
                   e.stopPropagation();
-                  const finalUrl = decryptUrl(song.encryptedUrl);
+                  const finalUrl = decryptUrl(decodeURIComponent(song.encryptedUrl));
                   if (!finalUrl) {
                     console.warn("Invalid decryption result for:", song.title);
                     return;
