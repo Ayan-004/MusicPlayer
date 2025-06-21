@@ -17,18 +17,13 @@ export function decryptUrl(
     });
 
     const final = decrypted.toString(CryptoJS.enc.Utf8);
-
-    if (!final || final.length < 10) {
-      console.warn("Decryption resulted in short/invalid string:", final);
-      return null;
-    }
-
-    return final;
+    return final || null;
   } catch (error) {
     console.error("Decryption error:", error);
     return null;
   }
 }
+
 
 
 
