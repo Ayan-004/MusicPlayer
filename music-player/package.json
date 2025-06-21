@@ -16,6 +16,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@tailwindcss/vite": "^4.1.4",
     "axios": "^1.9.0",
+    "crypto-js": "^4.2.0",
     "framer-motion": "^12.16.0",
     "lucide-react": "^0.516.0",
     "node-fetch": "^3.3.2",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "^22.15.14",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.3",
