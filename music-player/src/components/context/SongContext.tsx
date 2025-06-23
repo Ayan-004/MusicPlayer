@@ -13,6 +13,10 @@ export interface Song {
   image: string;
   url: string;
 }
+interface Playlist {
+  name: string;
+  songs: Song[];
+}
 
 interface SongContextType {
   currentSong: Song | null;
@@ -36,6 +40,11 @@ interface SongContextType {
   playNext: () => void;
   removeFromQueue: (index: number) => void;
   clearQueue: () => void;
+  playlists: Playlist[];
+  setPlaylists: (playlists: Playlist[]) => void;
+  createPlaylist: (name: string) => void;
+  addSongToPlaylist: (playlistName: string, song: Song) => void;
+  removeSongFromPlaylist: (playlistName: string, songIndex: number) => void;
 }
 
 const SongContext = createContext<SongContextType | undefined>(undefined);
@@ -62,6 +71,46 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
     }
     return [];
   });
+  const [playlists, setPlaylists] = useState<Playlist[]>(() => {
+    try {
+      const stored = localStorage.getItem("playlists");
+      return stored ? JSON.parse(stored) : [];
+    } catch (error) {
+      return [];
+    }
+  });
+
+  const createPlaylist = (name: string) => {
+    if (playlists.find((p) => p.name === name)) return;
+    setPlaylists([...playlists, { name, songs: [] }]);
+  };
+
+  const addSongToPlaylist = (playlistsName: string, song: Song) => {
+    setPlaylists((prev) => {
+      const existing = prev.find((p) => p.name === playlistsName);
+      if (existing) {
+        return prev.map((p) =>
+          p.name === playlistsName ? { ...p, songs: [...p.songs, song] } : p
+        );
+      } else {
+        return [...prev, { name: playlistsName, songs: [song] }];
+      }
+    });
+  };
+
+  const removeSongFromPlaylist = (playlistsName: string, songIndex: number) => {
+    setPlaylists((prev) =>
+      prev.map((p) =>
+        p.name === playlistsName
+          ? { ...p, songs: p.songs.filter((_, i) => i !== songIndex) }
+          : p
+      )
+    );
+  };
+
+  useEffect(() => {
+    localStorage.setItem("playlists", JSON.stringify(playlists));
+  }, [playlists]);
 
   const addToQueue = (song: Song) => {
     setQueue((prev) => [...prev, song]);
@@ -120,11 +169,10 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
   }, [queue]);
 
   useEffect(() => {
-    if(currentSong) {
+    if (currentSong) {
       console.log("Current Song url:", currentSong.url);
-      
     }
-  }, [currentSong])
+  }, [currentSong]);
 
   return (
     <SongContext.Provider
@@ -150,6 +198,11 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
         playNext,
         removeFromQueue,
         clearQueue,
+        playlists,
+        setPlaylists,
+        createPlaylist,
+        addSongToPlaylist,
+        removeSongFromPlaylist,
       }}
     >
       <audio
@@ -163,9 +216,9 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
         onEnded={playNext}
         crossOrigin="anonymous"
       >
-        {currentSong?.url ? (
+        {currentSong?.url && (
           <source src={currentSong?.url} type="audio/mpeg" />
-        ) : null}
+        )}
         Your browser does not support the audio element.
       </audio>
 

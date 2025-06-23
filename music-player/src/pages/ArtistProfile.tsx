@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useSong } from "../components/context/SongContext";
 import { AnimatedItem } from "../components/AnimateItem";
-import { ListPlus } from "lucide-react";
+import { CirclePlus, ListEnd } from "lucide-react";
 
 interface Song {
   title: string;
@@ -18,7 +18,7 @@ function decodeHTMLEntities(text: string): string {
 }
 
 function ArtistProfile() {
-  const { setCurrentSong, addToQueue } = useSong();
+  const { setCurrentSong, addToQueue, addSongToPlaylist } = useSong();
   const { artistName } = useParams();
   const location = useLocation();
   const passedImage = location.state?.artistImage;
@@ -135,9 +135,18 @@ function ArtistProfile() {
                   e.stopPropagation();
                   addToQueue(song);
                 }}
-                className="ml-auto -mr-9 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
+                className="ml-auto -mr-6 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
               >
-                <ListPlus />
+                <ListEnd />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addSongToPlaylist("My Favourites", song);
+                }}
+                className=" -mr-12 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
+              >
+                <CirclePlus />
               </button>
             </AnimatedItem>
           ))}
