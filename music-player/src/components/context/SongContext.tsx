@@ -119,6 +119,13 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("songQueue", JSON.stringify(queue));
   }, [queue]);
 
+  useEffect(() => {
+    if(currentSong) {
+      console.log("Current Song url:", currentSong.url);
+      
+    }
+  }, [currentSong])
+
   return (
     <SongContext.Provider
       value={{
@@ -154,10 +161,11 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
           if (audioRef.current) setDuration(audioRef.current.duration);
         }}
         onEnded={playNext}
+        crossOrigin="anonymous"
       >
-        {currentSong?.url && (
+        {currentSong?.url ? (
           <source src={currentSong?.url} type="audio/mpeg" />
-        )}
+        ) : null}
         Your browser does not support the audio element.
       </audio>
 

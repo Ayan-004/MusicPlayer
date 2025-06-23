@@ -3,14 +3,12 @@ import { useLocation } from "react-router-dom";
 import { useSong } from "./context/SongContext";
 import { AnimatedItem } from "./AnimateItem";
 import { ListPlus } from "lucide-react";
-// import CryptoJS from "crypto-js";
-import { decryptUrl } from "../utils/crypto";
 
 interface Song {
   title: string;
   artist: string;
   image: string;
-  encryptedUrl: string;
+  url: string;
 }
 
 function decodeHTMLEntities(text: string): string {
@@ -18,18 +16,6 @@ function decodeHTMLEntities(text: string): string {
   txt.innerHTML = text;
   return txt.value;
 }
-
-// function decryptMediaUrl(
-//   encryptedUrl: string,
-//   key: string = "38346591"
-// ): string {
-//   const keyHex = CryptoJS.enc.Utf8.parse(key);
-//   const decrypted = CryptoJS.DES.decrypt(encryptedUrl, keyHex, {
-//     mode: CryptoJS.mode.ECB,
-//     padding: CryptoJS.pad.Pkcs7,
-//   });
-//   return decrypted.toString(CryptoJS.enc.Utf8);
-// }
 
 const SearchResults = () => {
   const { setCurrentSong, addToQueue } = useSong();
@@ -43,93 +29,32 @@ const SearchResults = () => {
     if (!query) return;
 
     setLoading(true);
-    const proxyUrl = "https://galibproxy.fly.dev/";
-    const apiUrl = `https://www.jiosaavn.com/api.php?p=1&q=${encodeURIComponent(
-      query
-    )}&_format=json&_marker=0&api_version=4&ctx=web6dot0&n=20&__call=search.getResults`;
-
-    console.log("Proxy Api called with query:", query);
-
-    fetch(proxyUrl + apiUrl, {
-      headers: {
-        "x-requested-with": "XMLHttpRequest",
-      },
-    })
+    console.log("Api called with query:", query);
+    fetch(
+      `https://saavn.dev/api/search/songs?query=${encodeURIComponent(
+        query
+      )}&page=1&limit=50`
+    )
       .then((res) => res.json())
       .then((data) => {
-        const results = data?.results || [];
+        const results = data?.data?.results || [];
 
-        const formatted = results.map((song: any) => {
-          const title = decodeHTMLEntities(song.title || song.name);
-          const artistRaw =
-            song.more_info?.music ||
-            song.more_info?.primary_artists ||
-            song.more_info?.singers ||
-            "Unknown";
-          const artist = decodeHTMLEntities(artistRaw).trim() || "Unknown";
-          let image = song.image || "";
-          image = image.replace(/150x150/, "500x500");
-          image = image.replace(/^http:\/\//, "https://");
-          const encryptedUrl = song.more_info?.encrypted_media_url || "";
-
-          return {
-            title,
-            artist,
-            image,
-            encryptedUrl,
-          };
-        });
-        setSongs(formatted.filter((s: any) => s.encryptedUrl));
+        const formatted = results.map((song: any) => ({
+          title: decodeHTMLEntities(song.name || song.title),
+          artist:
+            decodeHTMLEntities(
+              song.artists?.primary?.map((a: any) => a.name).join(", ")
+            ) || "Unknown",
+          image: song.image?.[2].url || "",
+          url:
+            song.downloadUrl?.find((d: any) => d.quality === "320kbps")?.url ||
+            "",
+        }));
+        setSongs(formatted);
       })
-      .catch((err) => {
-        console.error("API Error:", err);
-        setSongs([]);
-      })
+      .catch(() => setSongs([]))
       .finally(() => setLoading(false));
   }, [query]);
-
-  const galibCache = new Map<string, any>();
-
-  const handlePlaySong = async (song: Song) => {
-    const finalUrl = decryptUrl(decodeURIComponent(song.encryptedUrl));
-    if (!finalUrl) {
-      console.warn("Invalid decryption result for:", song.title);
-      return;
-    }
-
-    setCurrentSong({
-      title: song.title,
-      artist: song.artist,
-      image: song.image,
-      url: finalUrl,
-    });
-
-    try {
-      if (!galibCache.has(song.encryptedUrl)) {
-        const response = await fetch(
-          `https://stillkonfuzed.com/Music/Galib.php?play=${encodeURIComponent(
-            song.encryptedUrl
-          )}`
-        );
-        const data = await response.json();
-        galibCache.set(song.encryptedUrl, data);
-      }
-
-      // const details = Object.values(galibCache.get(song.encryptedUrl))[0] as {
-      //   song?: string;
-      //   primary_artists?: string;
-      //   singers?: string;
-      //   image?: string;
-      //   "320kbps"?: string;
-      // };
-
-      // if (details["320kbps"]) {
-      //   finalUrl = details["320kbps"];
-      // }
-    } catch (error) {
-      console.error("Playback Error:", error);
-    }
-  };
 
   return (
     <div className="m-3 p-4 md:m-6 md:p-6 mb-56 md:pb-28 rounded-4xl bg-[#efefef] ">
@@ -157,7 +82,14 @@ const SearchResults = () => {
             <AnimatedItem
               key={index}
               index={index}
-              onClick={() => handlePlaySong(song)}
+              onClick={() =>
+                setCurrentSong({
+                  title: song.title,
+                  artist: song.artist,
+                  image: song.image,
+                  url: song.url,
+                })
+              }
             >
               <img
                 src={song.image}
@@ -173,59 +105,9 @@ const SearchResults = () => {
                 </p>
               </div>
               <button
-                onClick={async (e) => {
+                onClick={(e) => {
                   e.stopPropagation();
-                  const finalUrl = decryptUrl(decodeURIComponent(song.encryptedUrl));
-                  if (!finalUrl) {
-                    console.warn("Invalid decryption result for:", song.title);
-                    return;
-                  }
-
-                  setCurrentSong({
-                    title: song.title,
-                    artist: song.artist,
-                    image: song.image,
-                    url: finalUrl,
-                  });
-
-                  try {
-                    if (!galibCache.has(song.encryptedUrl)) {
-                      const response = await fetch(
-                        `https://stillkonfuzed.com/Music/Galib.php?play=${encodeURIComponent(
-                          song.encryptedUrl
-                        )}`
-                      );
-                      const data = await response.json();
-                      galibCache.set(song.encryptedUrl, data);
-                    }
-
-                    const details = Object.values(
-                      galibCache.get(song.encryptedUrl)
-                    )[0] as {
-                      song?: string;
-                      primary_artists?: string;
-                      singers?: string;
-                      image?: string;
-                      "320kbps"?: string;
-                    };
-
-                    // if (details["320kbps"]) {
-                    //   finalUrl = details["320kbps"];
-                    // }
-
-                    addToQueue({
-                      title: details.song || song.title,
-                      artist:
-                        details.primary_artists ||
-                        details.singers ||
-                        song.artist ||
-                        "Unknown",
-                      image: details.image || song.image,
-                      url: finalUrl,
-                    });
-                  } catch (error) {
-                    console.error("Failed to decrypt and queue song:", error);
-                  }
+                  addToQueue(song);
                 }}
                 className="ml-auto -mr-3 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
               >

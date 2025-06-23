@@ -17,6 +17,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api\/rss/, '')
 
+      },
+      './netlify/functions': {
+        target: 'http://localhost:8888',
+        changeOrigin: true,
+        secure: false,
       }
     }
   }

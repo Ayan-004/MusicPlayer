@@ -9,7 +9,7 @@ const AllRoute = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="/artist/:name" element={<ArtistProfile />} />
+        <Route path="/artist/:artistName" element={<ArtistProfile />} />
         <Route path="/search" element={<SearchResults />} />
       </Route>
     </Routes>
