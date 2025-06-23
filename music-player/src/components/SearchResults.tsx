@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useSong } from "./context/SongContext";
 import { AnimatedItem } from "./AnimateItem";
-import { ListPlus } from "lucide-react";
+import { CirclePlus, ListEnd } from "lucide-react";
 
 interface Song {
   title: string;
@@ -18,7 +18,7 @@ function decodeHTMLEntities(text: string): string {
 }
 
 const SearchResults = () => {
-  const { setCurrentSong, addToQueue } = useSong();
+  const { setCurrentSong, addToQueue, addSongToPlaylist } = useSong();
   const location = useLocation();
   const query = new URLSearchParams(location.search).get("query") || "";
 
@@ -111,7 +111,16 @@ const SearchResults = () => {
                 }}
                 className="ml-auto -mr-3 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
               >
-                <ListPlus />
+                <ListEnd />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addSongToPlaylist("My Favourites", song);
+                }}
+                className=" -mr-12 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
+              >
+                <CirclePlus />
               </button>
             </AnimatedItem>
           ))}
