@@ -1,9 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useSong } from "../components/context/SongContext";
 import { AnimatedItem } from "../components/AnimateItem";
-import { ListPlus, ListMusic, CircleMinus, ListEnd } from "lucide-react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { CircleMinus, ListEnd } from "lucide-react";
 
 function PlaylistDetail() {
   const { name } = useParams();

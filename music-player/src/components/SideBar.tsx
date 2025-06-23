@@ -5,7 +5,6 @@ import {
   faTimes,
   faCog,
   faMusic,
-  faBookOpen,
   faSignInAlt,
   faUserPlus,
   faListUl,
