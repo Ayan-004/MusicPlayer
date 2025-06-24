@@ -13,8 +13,9 @@ import ElasticSlider from "./ElasticSlider";
 import QueuePanel from "./QueuePanel";
 import { useIsMobile } from "../hooks/IsMobile";
 import { motion, AnimatePresence, easeOut, easeInOut } from "framer-motion";
-import { ListMusic } from "lucide-react";
+import { CirclePlus, ListMusic } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { Heart } from "react-feather";
 
 type FullPagePlayerProps = {
   showQueue: boolean;
@@ -33,6 +34,7 @@ const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
     audioRef,
     volume,
     setVolume,
+    addSongToPlaylist,
   } = useSong();
 
   const isMobile = useIsMobile();
@@ -183,7 +185,7 @@ const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
           </p>
         </div>
 
-        <div className="flex mt-3 -mr-12 text-xl xl:text-2xl 2xl:text-3xl">
+        <div className="flex mt-3 text-xl xl:text-2xl 2xl:text-3xl">
           <button className="text-gray-900 hover:text-black hover:scale-110 transition-all duration-500 ease-in-out cursor-pointer">
             <FontAwesomeIcon icon={faBackward} />
           </button>
@@ -207,12 +209,6 @@ const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
           <button className="text-gray-900 hover:text-black hover:scale-110 transition-all duration-500 ease-in-out cursor-pointer">
             <FontAwesomeIcon icon={faForward} />
           </button>
-          <button
-            onClick={() => setShowQueue(true)}
-            className="text-black hover:scale-110 transition-all cursor-pointer ml-6 xl:ml-8"
-          >
-            <ListMusic />
-          </button>
         </div>
 
         <ElasticSlider
@@ -231,6 +227,27 @@ const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
           }}
           className="mt-6 2xl:scale-125 2xl:mt-10"
         />
+
+        <div className="flex mr-8">
+          <button
+            onClick={() => setShowQueue(true)}
+            className="text-black hover:scale-110 transition-all cursor-pointer ml-6 xl:ml-8"
+          >
+            <ListMusic />
+          </button>
+          <button
+            onClick={() => currentSong && addSongToPlaylist("My Playlist", currentSong)}
+            className="text-black hover:scale-110 transition-all cursor-pointer ml-6 xl:ml-8"
+          >
+            <CirclePlus />
+          </button>
+          <button
+            onClick={() => currentSong && addSongToPlaylist("My Favourite", currentSong)}
+            className="text-black hover:scale-110 transition-all cursor-pointer ml-6 xl:ml-8"
+          >
+            <Heart />
+          </button>
+        </div>
       </motion.div>
     </motion.div>
   );

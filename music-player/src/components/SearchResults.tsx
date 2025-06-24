@@ -109,7 +109,7 @@ const SearchResults = () => {
                   e.stopPropagation();
                   addToQueue(song);
                 }}
-                className="ml-auto -mr-3 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
+                className="ml-auto -mr-6 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
               >
                 <ListEnd />
               </button>
@@ -118,7 +118,7 @@ const SearchResults = () => {
                   e.stopPropagation();
                   addSongToPlaylist("My Favourites", song);
                 }}
-                className=" -mr-12 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
+                className="-mr-7 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
               >
                 <CirclePlus />
               </button>

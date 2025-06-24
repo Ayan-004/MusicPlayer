@@ -157,22 +157,36 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (currentSong && audioRef.current) {
       audioRef.current.load();
-      audioRef.current
-        .play()
-        .then(() => setIsPlaying(true))
-        .catch(console.error);
+        audioRef.current
+          .play()
+          .then(() => setIsPlaying(true))
+          .catch(console.error);
     }
   }, [currentSong]);
 
-  useEffect(() => {
-    localStorage.setItem("songQueue", JSON.stringify(queue));
-  }, [queue]);
+  // useEffect(() => {
+  //   localStorage.setItem("songQueue", JSON.stringify(queue));
+  // }, [queue]);
+
+  // useEffect(() => {
+  //   if (currentSong) {
+  //     console.log("Current Song url:", currentSong.url);
+  //   }
+  // }, [currentSong]);
+
+  // useEffect(() => {
+  //   if(currentSong) {
+  //     localStorage.setItem("currentSong", JSON.stringify(currentSong))
+  //   }
+  // }, [currentSong]);
+
 
   useEffect(() => {
-    if (currentSong) {
-      console.log("Current Song url:", currentSong.url);
+    const stored = localStorage.getItem("currentSong");
+    if(stored) {
+      setCurrentSong(JSON.parse(stored))
     }
-  }, [currentSong]);
+  }, [])
 
   return (
     <SongContext.Provider

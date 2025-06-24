@@ -142,9 +142,9 @@ function ArtistProfile() {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  addSongToPlaylist("My Favourites", song);
+                  addSongToPlaylist("My Playlist", song);
                 }}
-                className=" -mr-12 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
+                className="-mr-12 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
               >
                 <CirclePlus />
               </button>
