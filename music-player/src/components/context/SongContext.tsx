@@ -126,10 +126,6 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    console.log("SongProvider mounted");
-  }, []);
-
-  useEffect(() => {
     localStorage.setItem("playlists", JSON.stringify(playlists));
   }, [playlists]);
 

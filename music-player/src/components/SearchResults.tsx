@@ -57,7 +57,7 @@ const SearchResults = () => {
   }, [query]);
 
   return (
-    <div className="m-3 p-4 md:m-6 md:p-6 mb-56 md:pb-28 rounded-4xl bg-[#efefef] ">
+    <div className="m-3 p-6 md:m-6 md:p-6 mb-56 md:pb-28 rounded-4xl bg-[#efefef] ">
       <h2 className="text-2xl font-calsans pt-2 pl-2 mb-10">
         Search Result for "{query}"
       </h2>

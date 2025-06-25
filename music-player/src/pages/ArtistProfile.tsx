@@ -101,7 +101,7 @@ function ArtistProfile() {
           😕 Couldn't find songs by {artistName}. Try again later
         </p>
       ) : (
-        <div className="flex flex-col gap-2 bg-[#efefef] p-10 rounded-4xl m-3 md:m-6 mb-56 md:mb-36">
+        <div className="flex flex-col gap-2 bg-[#efefef] p-6 rounded-4xl m-3 md:m-6 mb-56 md:mb-36">
           {songs.map((song, index) => (
             <AnimatedItem
               key={index}
@@ -144,7 +144,7 @@ function ArtistProfile() {
                   e.stopPropagation();
                   addSongToPlaylist("My Playlist", song);
                 }}
-                className="-mr-12 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
+                className="-mr-7 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
               >
                 <CirclePlus />
               </button>
