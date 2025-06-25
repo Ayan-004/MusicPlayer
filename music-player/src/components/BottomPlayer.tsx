@@ -9,11 +9,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const BottomPlayer = () => {
+const BottomPlayer = ({onOpenFullPlayer}: {onOpenFullPlayer: () => void}) => {
   const {
     currentSong,
     showFullPlayer,
-    setShowFullPlayer,
+    // setShowFullPlayer,
     isPlaying,
     setIsPlaying,
     currentTime,
@@ -64,6 +64,34 @@ const BottomPlayer = () => {
     return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
   };
 
+  useEffect(() => {
+    if(!currentSong || !("mediaSession" in navigator)) return;
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: currentSong.title,
+      artist: currentSong.artist,
+      artwork: [
+        {
+          src: currentSong.image,
+          sizes: "512x512",
+          type: "image/jpeg",
+        }
+      ]
+    })
+
+    navigator.mediaSession.setActionHandler("play", () => {
+      audioRef.current?.play();
+      setIsPlaying(true);
+    })
+
+    navigator.mediaSession.setActionHandler("pause", () => {
+      audioRef.current?.pause();
+      setIsPlaying(false);
+    })
+
+
+  }, [currentSong, audioRef, setIsPlaying])
+
   if (!currentSong || !currentSong?.url) return null;
 
   return (
@@ -77,7 +105,7 @@ const BottomPlayer = () => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div
-            onClick={() => setShowFullPlayer(true)}
+            onClick={onOpenFullPlayer}
             className="flex items-center gap-4 md:gap-1 min-w-0"
           >
             {currentSong.image && (

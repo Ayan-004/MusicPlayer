@@ -1,7 +1,8 @@
 import { useSong } from "./context/SongContext";
-import { faCircleXmark, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
+import { CircleMinus } from "lucide-react";
 
 interface Props {
   onClose: () => void;
@@ -71,9 +72,9 @@ const QueuePanel = ({ onClose }: Props) => {
                   e.stopPropagation();
                   removeFromQueue(index);
                 }}
-                className="text-red-500 hover:text-red-700 text-xl cursor-pointer"
+                className="text-xl cursor-pointer"
               >
-                <FontAwesomeIcon icon={faTrashCan} />
+                <CircleMinus />
               </button>
             </div>
           ))}

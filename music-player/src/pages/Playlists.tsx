@@ -6,7 +6,7 @@ function Playlists() {
 
   return (
     <div>
-      <h1 className="text-3xl font-calsans ml-6">Your Playlists</h1>
+      <h1 className="text-3xl xl:text-5xl font-calsans ml-6">Your Playlists</h1>
       {playlists.length === 0 || playlists.every(p => p.songs.length === 0)? (
         <p className="text-center mt-10 text-gray-500 font-montserrat-medium">
           No playlist created yet.

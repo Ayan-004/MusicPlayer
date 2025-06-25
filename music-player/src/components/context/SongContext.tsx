@@ -6,6 +6,7 @@ import {
   ReactNode,
   useEffect,
 } from "react";
+import toast from "react-hot-toast";
 
 export interface Song {
   title: string;
@@ -59,6 +60,7 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
   const [volume, setVolume] = useState(savedVolume);
   const [allSongs, setAllSongs] = useState<Song[]>([]);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const previousSongUrl = useRef<string | null>(null);
   const [queue, setQueue] = useState<Song[]>(() => {
     try {
       const storedQueue = localStorage.getItem("songQueue");
@@ -86,16 +88,31 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const addSongToPlaylist = (playlistsName: string, song: Song) => {
-    setPlaylists((prev) => {
-      const existing = prev.find((p) => p.name === playlistsName);
-      if (existing) {
-        return prev.map((p) =>
-          p.name === playlistsName ? { ...p, songs: [...p.songs, song] } : p
-        );
-      } else {
-        return [...prev, { name: playlistsName, songs: [song] }];
+    const existing = playlists.find((p) => p.name === playlistsName);
+    if (existing) {
+      toast.success(`Added to ${playlistsName}`, {style: {
+        border: "1px solid #d1d5dc",
+        padding: "16px",
+        backdropFilter: "blur(7px)",
+        WebkitBackdropFilter: "blur(7px)",
+        background: "rgba(255, 255, 255, 0.5)",
+        fontFamily: "montserrat-medium",
+        borderRadius: "20px"
+      },
+      iconTheme: {
+        primary: "#000000",
+        secondary: "#f0f0f0"
       }
     });
+      setPlaylists((prev) =>
+        prev.map((p) =>
+          p.name === playlistsName ? { ...p, songs: [song, ...p.songs] } : p
+        )
+      );
+    } else {
+      toast.success(`${playlistsName} created and song added`);
+      setPlaylists((prev) => [...prev, { name: playlistsName, songs: [song] }]);
+    }
   };
 
   const removeSongFromPlaylist = (playlistsName: string, songIndex: number) => {
@@ -109,10 +126,28 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+    console.log("SongProvider mounted");
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem("playlists", JSON.stringify(playlists));
   }, [playlists]);
 
   const addToQueue = (song: Song) => {
+    toast.success(`Added to queue`, {style: {
+        border: "1px solid #d1d5dc",
+        padding: "16px",
+        backdropFilter: "blur(7px)",
+        WebkitBackdropFilter: "blur(7px)",
+        background: "rgba(255, 255, 255, 0.5)",
+        fontFamily: "montserrat-medium",
+        borderRadius: "20px"
+      },
+      iconTheme: {
+        primary: "#000000",
+        secondary: "#f0f0f0"
+      }
+    });
     setQueue((prev) => [...prev, song]);
 
     if ("vibrate" in navigator) {
@@ -156,37 +191,32 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (currentSong && audioRef.current) {
+      if (previousSongUrl.current === currentSong.url) return;
+
+      previousSongUrl.current = currentSong.url;
+
       audioRef.current.load();
-        audioRef.current
-          .play()
-          .then(() => setIsPlaying(true))
-          .catch(console.error);
+      audioRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(console.error);
     }
   }, [currentSong]);
 
-  // useEffect(() => {
-  //   localStorage.setItem("songQueue", JSON.stringify(queue));
-  // }, [queue]);
-
-  // useEffect(() => {
-  //   if (currentSong) {
-  //     console.log("Current Song url:", currentSong.url);
-  //   }
-  // }, [currentSong]);
-
-  // useEffect(() => {
-  //   if(currentSong) {
-  //     localStorage.setItem("currentSong", JSON.stringify(currentSong))
-  //   }
-  // }, [currentSong]);
-
+  useEffect(() => {
+    if (currentSong) {
+      localStorage.setItem("currentSong", JSON.stringify(currentSong));
+    }
+  }, [currentSong]);
 
   useEffect(() => {
     const stored = localStorage.getItem("currentSong");
-    if(stored) {
-      setCurrentSong(JSON.parse(stored))
+    if (stored && !currentSong) {
+      const parsedSong = JSON.parse(stored);
+      setCurrentSong(parsedSong);
+      previousSongUrl.current = parsedSong.url;
     }
-  }, [])
+  }, []);
 
   return (
     <SongContext.Provider

@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import NavBar from "./NavBar";
 import SideBar from "./SideBar";
@@ -12,8 +12,20 @@ import { AnimatePresence } from "framer-motion";
 
 const Layout = () => {
   const [collapsed, setCollapsed] = useState(window.innerWidth < 1440);
-  const { showFullPlayer } = useSong();
+  const { showFullPlayer, setShowFullPlayer } = useSong();
   const [showQueue, setShowQueue] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    const isPlayerOpen =  searchParams.get("player") === "open";
+    if(isPlayerOpen && !showFullPlayer) {
+      setShowFullPlayer(true);
+    }
+
+    if(!isPlayerOpen && showFullPlayer) {
+      setShowFullPlayer(false);
+    }
+  }, [searchParams, showFullPlayer, setShowFullPlayer])
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,6 +41,14 @@ const Layout = () => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const openFullPlayer = () => {
+    setSearchParams({player: "open"})
+  };
+
+  const closeFullPlayer = () => {
+    setSearchParams({});
+  }
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -54,12 +74,13 @@ const Layout = () => {
           )}
           <NavBar />
           <Outlet />
-          <BottomPlayer />
+          <BottomPlayer onOpenFullPlayer={openFullPlayer} />
           <AnimatePresence mode="wait">
             {showFullPlayer && (
               <FullPagePlayer
                 showQueue={showQueue}
                 setShowQueue={setShowQueue}
+                onClose={closeFullPlayer}
               />
             )}
           </AnimatePresence>

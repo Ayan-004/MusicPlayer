@@ -9,6 +9,7 @@ import {
   faUserPlus,
   faListUl,
 } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 type SideBarProps = {
   collapsed: boolean;
@@ -39,17 +40,16 @@ function SideBar({ collapsed, setCollapsed }: SideBarProps) {
           </button>
         </div>
         <ul className="sidebar-menu pt-12 pl-6 md:pl-6 text-2xl font-montserrat-medium text-[#464646]">
-          <a
-            href="/home"
+          <Link to="/home"
             className="menu-item flex items-center hover:bg-[#3d3b3b] backdrop-blur-md gap-2 hover:text-[#cdd084] transition-all hover:rounded-full w-40 cursor-pointer hover:shadow-lg p-3"
           >
             <FontAwesomeIcon icon={faHome} size="xs" />
             <span>Home</span>
-          </a>
-          <a href="/playlists" className="menu-item flex items-center hover:bg-[#3d3b3b] backdrop-blur-md gap-2 hover:text-[#cdd084] transition-all hover:rounded-full w-40 cursor-pointer hover:shadow-lg p-3">
+          </Link>
+          <Link to="/playlists" className="menu-item flex items-center hover:bg-[#3d3b3b] backdrop-blur-md gap-2 hover:text-[#cdd084] transition-all hover:rounded-full w-40 cursor-pointer hover:shadow-lg p-3">
             <FontAwesomeIcon icon={faListUl} size="xs" />
             <span>Playlists</span>
-          </a>
+          </Link>
           <li className="menu-item flex items-center hover:bg-[#3d3b3b] backdrop-blur-md gap-2 hover:text-[#cdd084] transition-all hover:rounded-full w-40 cursor-pointer hover:shadow-lg p-3">
             <FontAwesomeIcon icon={faMusic} size="xs" />
             <span>Radio</span>

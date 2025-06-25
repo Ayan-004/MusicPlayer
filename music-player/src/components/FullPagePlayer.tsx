@@ -20,12 +20,12 @@ import { Heart } from "react-feather";
 type FullPagePlayerProps = {
   showQueue: boolean;
   setShowQueue: (val: boolean) => void;
+  onClose: () => void;
 };
 
-const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
+const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProps) => {
   const {
     currentSong,
-    setShowFullPlayer,
     isPlaying,
     setIsPlaying,
     currentTime,
@@ -108,7 +108,7 @@ const FullPagePlayer = ({ showQueue, setShowQueue }: FullPagePlayerProps) => {
     >
       <button
         className="absolute top-10 right-10 text-3xl xl:text-4xl hover:cursor-pointer"
-        onClick={() => setShowFullPlayer(false)}
+        onClick={onClose}
       >
         <FontAwesomeIcon icon={faCircleXmark} />
       </button>
