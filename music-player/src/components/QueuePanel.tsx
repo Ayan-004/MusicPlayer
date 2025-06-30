@@ -1,6 +1,5 @@
-import { useSong } from "./context/SongContext";
-import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Song, useSong } from "./context/SongContext";
+import { XCircleIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
 import { CircleMinus } from "lucide-react";
 
@@ -11,6 +10,17 @@ interface Props {
 const QueuePanel = ({ onClose }: Props) => {
   const { queue, removeFromQueue, setCurrentSong, setIsPlaying, clearQueue } =
     useSong();
+
+    const handleSongClick = (song: Song) => {
+      setCurrentSong(song);
+      setIsPlaying(true);
+      onClose();
+    }
+
+    const handleRemove = (e: React.MouseEvent, index: number) => {
+      e.stopPropagation();
+      removeFromQueue(index);
+    }
 
   return (
     <motion.div
@@ -32,7 +42,7 @@ const QueuePanel = ({ onClose }: Props) => {
           onClick={onClose}
           className="text-3xl xl:text-4xl hover:cursor-pointer"
         >
-          <FontAwesomeIcon icon={faCircleXmark} />
+          <XCircleIcon className="w-8 h-8"/>
         </button>
       </div>
 
@@ -44,19 +54,16 @@ const QueuePanel = ({ onClose }: Props) => {
         <div className="flex flex-col gap-2 rounded-4xl m-3 md:m-6 mb-56 md:pb-24">
           {queue.map((song, index) => (
             <div
-              key={index}
-              className="flex items-center justify-between gap-4 cursor-pointer bg-white/35 p-3 rounded-2xl hover:scale-105 transition"
-              onClick={() => {
-                setCurrentSong(song);
-                setIsPlaying(true);
-                onClose();
-              }}
+              key={song.url}
+              className="flex items-center justify-between gap-4 cursor-pointer bg-white/35 p-3 rounded-2xl hover:scale-105 hover:bg-white/50 transition"
+              onClick={() => handleSongClick(song)}
             >
               <div className="flex items-center gap-3 ">
                 <img
                   src={song.image}
-                  alt={song.title}
+                  alt={`$Cover art for {song.title} by ${song.artist}`}
                   className="w-12 h-12 rounded-full object-cover"
+                  loading="lazy"
                 />
                 <div className="w-36">
                   <p className="font-montserrat-medium text-sm truncate">
@@ -68,10 +75,8 @@ const QueuePanel = ({ onClose }: Props) => {
                 </div>
               </div>
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeFromQueue(index);
-                }}
+              aria-label={`Remove ${song.title} from queue`}
+                onClick={(e) => handleRemove(e, index)}
                 className="text-xl cursor-pointer"
               >
                 <CircleMinus />

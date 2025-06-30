@@ -7,6 +7,7 @@ import {
   useEffect,
 } from "react";
 import toast from "react-hot-toast";
+import { debounce } from "lodash";
 
 export interface Song {
   title: string;
@@ -61,26 +62,29 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
   const [allSongs, setAllSongs] = useState<Song[]>([]);
   const audioRef = useRef<HTMLAudioElement>(null);
   const previousSongUrl = useRef<string | null>(null);
-  const [queue, setQueue] = useState<Song[]>(() => {
+  const [queue, setQueue] = useState<Song[]>([]);
+
+  useEffect(() => {
     try {
       const storedQueue = localStorage.getItem("songQueue");
       if (storedQueue) {
         const parsed = JSON.parse(storedQueue);
-        if (Array.isArray(parsed)) return parsed;
+        if (Array.isArray(parsed)) setQueue(parsed);
       }
     } catch (e) {
       console.error("Failed to parse queue from localStorage:", e);
     }
-    return [];
-  });
-  const [playlists, setPlaylists] = useState<Playlist[]>(() => {
+  }, []);
+
+  const [playlists, setPlaylists] = useState<Playlist[]>([]);
+  useEffect(() => {
     try {
       const stored = localStorage.getItem("playlists");
-      return stored ? JSON.parse(stored) : [];
+      if (stored) setPlaylists(JSON.parse(stored));
     } catch (error) {
-      return [];
+      console.error("Failed to parse playlists:", error);
     }
-  });
+  }, []);
 
   const createPlaylist = (name: string) => {
     if (playlists.find((p) => p.name === name)) return;
@@ -90,20 +94,21 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
   const addSongToPlaylist = (playlistsName: string, song: Song) => {
     const existing = playlists.find((p) => p.name === playlistsName);
     if (existing) {
-      toast.success(`Added to ${playlistsName}`, {style: {
-        border: "1px solid #d1d5dc",
-        padding: "16px",
-        backdropFilter: "blur(7px)",
-        WebkitBackdropFilter: "blur(7px)",
-        background: "rgba(255, 255, 255, 0.5)",
-        fontFamily: "montserrat-medium",
-        borderRadius: "20px"
-      },
-      iconTheme: {
-        primary: "#000000",
-        secondary: "#f0f0f0"
-      }
-    });
+      toast.success(`Added to ${playlistsName}`, {
+        style: {
+          border: "1px solid #d1d5dc",
+          padding: "16px",
+          backdropFilter: "blur(7px)",
+          WebkitBackdropFilter: "blur(7px)",
+          background: "rgba(255, 255, 255, 0.5)",
+          fontFamily: "montserrat-medium",
+          borderRadius: "20px",
+        },
+        iconTheme: {
+          primary: "#000000",
+          secondary: "#f0f0f0",
+        },
+      });
       setPlaylists((prev) =>
         prev.map((p) =>
           p.name === playlistsName ? { ...p, songs: [song, ...p.songs] } : p
@@ -130,19 +135,20 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
   }, [playlists]);
 
   const addToQueue = (song: Song) => {
-    toast.success(`Added to queue`, {style: {
+    toast.success(`Added to queue`, {
+      style: {
         border: "1px solid #d1d5dc",
         padding: "16px",
         backdropFilter: "blur(7px)",
         WebkitBackdropFilter: "blur(7px)",
         background: "rgba(255, 255, 255, 0.5)",
         fontFamily: "montserrat-medium",
-        borderRadius: "20px"
+        borderRadius: "20px",
       },
       iconTheme: {
         primary: "#000000",
-        secondary: "#f0f0f0"
-      }
+        secondary: "#f0f0f0",
+      },
     });
     setQueue((prev) => [...prev, song]);
 
@@ -150,6 +156,10 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
       navigator.vibrate(50);
     }
   };
+
+  useEffect(() => {
+    localStorage.setItem("songQueue", JSON.stringify(queue));
+  }, [queue]);
 
   const removeFromQueue = (index: number) => {
     setQueue((prev) => prev.filter((_, i) => i !== index));
@@ -169,11 +179,15 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const debouncedSavedVolume = debounce((v: number) => {
+    localStorage.setItem("volume", v.toString())
+  }, 500)
+
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
     }
-    localStorage.setItem("volume", volume.toString());
+    debouncedSavedVolume(volume);
   }, [volume]);
 
   useEffect(() => {
@@ -245,22 +259,22 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
         removeSongFromPlaylist,
       }}
     >
-      <audio
-        ref={audioRef}
-        onTimeUpdate={() => {
-          if (audioRef.current) setCurrentTime(audioRef.current.currentTime);
-        }}
-        onLoadedMetadata={() => {
-          if (audioRef.current) setDuration(audioRef.current.duration);
-        }}
-        onEnded={playNext}
-        crossOrigin="anonymous"
-      >
-        {currentSong?.url && (
-          <source src={currentSong?.url} type="audio/mpeg" />
-        )}
-        Your browser does not support the audio element.
-      </audio>
+      {currentSong?.url && (
+        <audio
+          ref={audioRef}
+          onTimeUpdate={() => {
+            if (audioRef.current) setCurrentTime(audioRef.current.currentTime);
+          }}
+          onLoadedMetadata={() => {
+            if (audioRef.current) setDuration(audioRef.current.duration);
+          }}
+          onEnded={playNext}
+          crossOrigin="anonymous"
+        >
+          <source src={currentSong.url} type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
+      )}
 
       {children}
     </SongContext.Provider>

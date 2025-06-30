@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import NavBar from "./NavBar";
 import SideBar from "./SideBar";
 import BottomPlayer from "./BottomPlayer";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { Menu } from "lucide-react";
 import FullPagePlayer from "./FullPagePlayer";
 import QueuePanel from "./QueuePanel";
 import { useSong } from "./context/SongContext";
@@ -17,15 +16,8 @@ const Layout = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    const isPlayerOpen =  searchParams.get("player") === "open";
-    if(isPlayerOpen && !showFullPlayer) {
-      setShowFullPlayer(true);
-    }
-
-    if(!isPlayerOpen && showFullPlayer) {
-      setShowFullPlayer(false);
-    }
-  }, [searchParams, showFullPlayer, setShowFullPlayer])
+    setShowFullPlayer(searchParams.get("player") === "open");
+  }, [searchParams, setShowFullPlayer])
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,15 +53,16 @@ const Layout = () => {
       </div>
 
       <div
-        className={`flex flex-col flex-1 bg-white shadow-2xl xl:rounded-l-4xl overflow-hidden xl:opacity-100 z-30 transition-all`}
+        className={`flex flex-col flex-1 bg-white shadow-2xl xl:rounded-l-4xl overflow-hidden z-30 transition-all`}
       >
         <div className="flex-1 relative overflow-y-auto">
           {collapsed && !showFullPlayer && (
             <button
+            aria-label="Open sidebar"
               className="absolute top-6 left-4 md:left-11 z-50 text-2xl xl:hidden p-2 "
               onClick={() => setCollapsed(false)}
             >
-              <FontAwesomeIcon icon={faBars} />
+              <Menu size={30}/>
             </button>
           )}
           <NavBar />
@@ -87,9 +80,7 @@ const Layout = () => {
 
           <AnimatePresence>
             {showQueue && (
-              <div>
                 <QueuePanel onClose={() => setShowQueue(false)} />
-              </div>
             )}
           </AnimatePresence>
         </div>

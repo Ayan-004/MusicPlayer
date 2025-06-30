@@ -2,10 +2,16 @@ import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import { Link } from "react-router-dom";
 
+interface Item {
+  name: string;
+  image: string;
+  isGlobal: boolean;
+}
+
 interface CardSliderProps {
   title?: string;
-  items?: any[];
-  artists?: any[];
+  items?: Item[];
+  artists?: Item[];
   loading?: boolean;
 }
 
@@ -19,19 +25,15 @@ function CardSlider({
 
   const scrollLeft = () => {
     if (scrollRef.current) {
-      scrollRef.current.scrollBy({
-        left: -300,
-        behavior: "smooth",
-      });
+      const scrollByAmount = scrollRef.current.clientWidth / 2 || 300;
+      scrollRef.current.scrollBy({ left: -scrollByAmount, behavior: "smooth" })
     }
   };
 
   const scrollRight = () => {
     if (scrollRef.current) {
-      scrollRef.current.scrollBy({
-        left: 300,
-        behavior: "smooth",
-      });
+      const scrollByAmount = scrollRef.current.clientWidth / 2 || 300;
+      scrollRef.current.scrollBy({ left: scrollByAmount, behavior: "smooth" })
     }
   };
 
@@ -46,9 +48,7 @@ function CardSlider({
         <p className="text-gray-600 font-montserrat-medium ml-3">Loading...</p>
       </div>
     );
-  }
-
-  if (!loading && artists.length === 0 && items.length === 0) {
+  } else if ((artists.length === 0 && items.length === 0)) {
     return (
       <div className="font-montserrat-medium text-center py-10 text-gray-500">
         No data found. Please try again later.
@@ -60,6 +60,7 @@ function CardSlider({
     <div className="relative">
       {/* LeftScroll buttons */}
       <button
+      aria-label="Scroll left"
         onClick={scrollLeft}
         className="hidden xl:block absolute top-44 left-3 transform -translate-y-1/2 backdrop-blur-lg rounded-full p-2 hover:shadow-lg transition-all cursor-pointer z-10"
       >
@@ -88,8 +89,9 @@ function CardSlider({
                 <div className="card">
                   <img
                     src={items.image}
-                    alt={items.name}
-                    className="w-32 h-32 md:w-50 md:h-50 object-cover rounded-full mx-auto mb-3 shadow-lg shadow-gray-300 hover:cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out"
+                    alt={items.name || "Artist image"}
+                    loading="lazy"
+                    className="w-32 h-32 md:w-50 md:h-50 object-cover rounded-full mx-auto mb-3 shadow-lg shadow-gray-300 hover:cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out"
                   />
 
                   <h2 className="truncate max-w-[120px] ml-2 md:ml-10 text-md md:text-lg font-montserrat-medium text-center text-black">
@@ -104,6 +106,7 @@ function CardSlider({
 
       {/* RightScroll buttons */}
       <button
+      aria-label="Scroll right"
         className="hidden xl:block absolute top-44 right-3 transform -translate-y-1/2 backdrop-blur-lg rounded-full p-2 hover:shadow-lg cursor-pointer z-10"
         onClick={scrollRight}
       >

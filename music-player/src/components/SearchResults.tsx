@@ -26,34 +26,44 @@ const SearchResults = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!query) return;
+    if (!query.trim()) return;
 
     setLoading(true);
-    console.log("Api called with query:", query);
-    fetch(
-      `https://saavn.dev/api/search/songs?query=${encodeURIComponent(
-        query
-      )}&page=1&limit=50`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        const results = data?.data?.results || [];
 
-        const formatted = results.map((song: any) => ({
-          title: decodeHTMLEntities(song.name || song.title),
-          artist:
-            decodeHTMLEntities(
-              song.artists?.primary?.map((a: any) => a.name).join(", ")
-            ) || "Unknown",
-          image: song.image?.[2].url || "",
-          url:
-            song.downloadUrl?.find((d: any) => d.quality === "320kbps")?.url ||
-            "",
-        }));
+    const fetchSongs = async () => {
+      try {
+        const res = await fetch(
+          `https://saavn.dev/api/search/songs?query=${encodeURIComponent(
+            query
+          )}&page=1&limit=50`
+        );
+        const data = await res.json();
+
+        const formatted: Song[] = (data?.data?.results || []).map(
+          (song: any) => ({
+            title: decodeHTMLEntities(song.name || song.title),
+            artist: song.artists?.primary?.length
+              ? decodeHTMLEntities(
+                  song.artists?.primary?.map((a: any) => a.name).join(", ")
+                )
+              : "Unknown",
+            image: song.image?.[2].url || "",
+            url:
+              song.downloadUrl?.find((d: any) => d.quality === "320kbps")
+                ?.url || "",
+          })
+        );
+
         setSongs(formatted);
-      })
-      .catch(() => setSongs([]))
-      .finally(() => setLoading(false));
+      } catch (e) {
+        console.error("Fetch failed", e);
+        setSongs([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSongs();
   }, [query]);
 
   return (
@@ -74,7 +84,7 @@ const SearchResults = () => {
         </div>
       ) : songs.length === 0 ? (
         <p className="flex justify-center font-montserrat-medium">
-          😕No songs found.
+          😕No songs found for "{query}".
         </p>
       ) : (
         <div className="space-y-4">
@@ -82,18 +92,12 @@ const SearchResults = () => {
             <AnimatedItem
               key={index}
               index={index}
-              onClick={() =>
-                setCurrentSong({
-                  title: song.title,
-                  artist: song.artist,
-                  image: song.image,
-                  url: song.url,
-                })
-              }
+              onClick={() => setCurrentSong(song)}
             >
               <img
                 src={song.image}
                 alt={song.title}
+                loading="lazy"
                 className="w-14 h-14 md:w-16 md:h-16 rounded-full object-cover"
               />
               <div className="flex flex-col min-w-0 max-w-xs md:max-w-md overflow-hidden">
@@ -105,8 +109,10 @@ const SearchResults = () => {
                 </p>
               </div>
               <button
+                aria-label="Add To Queue"
                 onClick={(e) => {
                   e.stopPropagation();
+                  if (!song.url) return;
                   addToQueue(song);
                 }}
                 className="ml-auto -mr-6 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"
@@ -114,8 +120,10 @@ const SearchResults = () => {
                 <ListEnd />
               </button>
               <button
+                aria-label="Add To Playlist"
                 onClick={(e) => {
                   e.stopPropagation();
+                  if (!song.url) return;
                   addSongToPlaylist("My Playlist", song);
                 }}
                 className="-mr-7 md:-mr-0 text-sm px-3 py-1 text-black hover:scale-110 transition-all cursor-pointer"

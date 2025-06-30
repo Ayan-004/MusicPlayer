@@ -3,12 +3,17 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import { Navigation } from "swiper/modules";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
-import { faVolumeMute } from "@fortawesome/free-solid-svg-icons";
+import { SpeakerXMarkIcon, SpeakerWaveIcon } from "@heroicons/react/24/solid";
+
+type Track = {
+  trackName: string;
+  artistName: string;
+  artworkUrl100: string;
+  previewUrl: string;
+};
 
 function SongPreview() {
-  const [track, setTrack] = useState<any[]>([]);
+  const [track, setTrack] = useState<Track[]>([]);
   const [isMuted, setIsMuted] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -117,7 +122,7 @@ function SongPreview() {
   };
 
   return (
-    <div className="song-item min-h-auto xl:h-11/12 xl:mt-10 xl:ml-3 md:w-2xl md:mt-5 md:ml-7 lg:w-full lg:-ml-1 lg:max-w-sm bg-[#efefef] p-6 rounded-4xl">
+    <div className="song-item w-full max-w-md bg-[#efefef] p-6 rounded-4xl">
       <h2 className="text-2xl md:text-2xl lg:text-3xl font-calsans mb-4">
         Top Tracks
       </h2>
@@ -146,7 +151,7 @@ function SongPreview() {
           onSlideChange={handleSlideChange}
         >
           {track.map((items, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={items.trackName}>
               <div className="flex flex-col items-center">
                 <img
                   src={items.artworkUrl100}
@@ -198,13 +203,11 @@ function SongPreview() {
                       className="w-full mt-2"
                     ></audio>
                     <button
+                      aria-label={isMuted ? "Unmute preview" : "Mute preview"}
                       onClick={handleMuteToggle}
                       className="absolute w-10 top-3 text-center -right-5 bg-[#cbcbcb] rounded-full p-3 text-xs  hover:cursor-pointer"
                     >
-                      <FontAwesomeIcon
-                        icon={isMuted ? faVolumeMute : faVolumeHigh}
-                        className=""
-                      />
+                      {isMuted ? <SpeakerXMarkIcon /> : <SpeakerWaveIcon />}
                     </button>
                   </div>
                 ) : (

@@ -1,21 +1,21 @@
 import { useSong } from "./context/SongContext";
 import {
-  faBackward,
-  faPlay,
-  faPause,
-  faForward,
-  faCircleXmark,
-  faVolumeLow,
-  faVolumeHigh,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  PlayIcon,
+  PauseIcon,
+  ForwardIcon,
+  BackwardIcon,
+  XCircleIcon,
+  SpeakerWaveIcon,
+  SpeakerXMarkIcon,
+} from "@heroicons/react/24/solid";
 import ElasticSlider from "./ElasticSlider";
-import QueuePanel from "./QueuePanel";
+import { lazy, Suspense } from 'react'
 import { useIsMobile } from "../hooks/IsMobile";
 import { motion, AnimatePresence, easeOut, easeInOut } from "framer-motion";
-import { CirclePlus, ListMusic } from "lucide-react";
+import { } from "lucide-react";
+import { QueueListIcon, PlusCircleIcon, HeartIcon } from "@heroicons/react/24/outline"
 import { useEffect, useRef, useState } from "react";
-import { Heart } from "react-feather";
+const QueuePanel = lazy(() => import("./QueuePanel"));
 
 type FullPagePlayerProps = {
   showQueue: boolean;
@@ -38,7 +38,7 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
   } = useSong();
 
   const isMobile = useIsMobile();
-  const exitY = isMobile ? "2000vh" : "9000vh";
+  const exitY = isMobile ? "100vh" : "100vh";
 
   const titleRefs = useRef<HTMLDivElement | null>(null);
   const artistRefs = useRef<HTMLDivElement | null>(null);
@@ -59,15 +59,10 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
 
   useEffect(() => {
     if (!titleRefs.current || !artistRefs.current) return;
-    const newIsTitleOverflowing =
-      titleRefs.current.scrollWidth > titleRefs.current.clientWidth;
 
-    const newIsArtistsOverflowing =
-      artistRefs.current.scrollWidth > artistRefs.current.clientWidth;
-
-    setIsTitleOverflowing(newIsTitleOverflowing);
-    setIsArtistsOverfowing(newIsArtistsOverflowing);
-  }, [currentSong]);
+    setIsTitleOverflowing(titleRefs.current.scrollWidth > titleRefs.current.clientWidth);
+    setIsArtistsOverfowing(artistRefs.current.scrollWidth > artistRefs.current.clientWidth);
+  }, [currentSong?.title, currentSong?.artist]);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -97,24 +92,31 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 900 }}
+      initial={{ opacity: 0, y: "100vh" }}
       animate={{ opacity: 1, y: 0 }}
       exit={{
-        translateY: exitY,
-        transition: { duration: 0.5, ease: easeInOut },
+        y: exitY,
+        // translateY: exitY,
+        opacity: 0,
+        transition: { duration: 0.4, ease: easeInOut },
       }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
+      style={{ willChange: "tranform, opacity" }}
       className={`fixed top-0 min-w-full xl:min-w-min xl:left-[230px] right-0 bottom-0 xl:rounded-l-4xl backdrop-blur-xl xl:backdrop-blur-2xl text-black z-40 p-6 flex flex-col items-center justify-center overflow-hidden transition-all duration-500 ease-in-out`}
     >
       <button
-        className="absolute top-10 right-10 text-3xl xl:text-4xl hover:cursor-pointer"
+        aria-label="Close player"
         onClick={onClose}
       >
-        <FontAwesomeIcon icon={faCircleXmark} />
+        <XCircleIcon className="absolute top-10 right-10 w-8 h-8 xl:w-12 xl:h-12 hover:cursor-pointer" />
       </button>
 
       <AnimatePresence>
-        {showQueue && <QueuePanel onClose={() => setShowQueue(false)} />}
+        {showQueue && (
+          <Suspense fallback={<div>Loading...</div>}>
+          <QueuePanel onClose={() => setShowQueue(false)} />
+          </Suspense>
+  )}
       </AnimatePresence>
 
       <motion.div
@@ -122,7 +124,7 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
         animate={{ opacity: 1, scale: 1 }}
         exit={{ scale: 0.8, transition: { duration: 0.1, ease: easeInOut } }}
         transition={{ delay: 0.15, duration: 0.4, ease: easeOut }}
-        className={`flex flex-col items-center justify-center mt-9 space-y-3 transition-all duration-500 ease-in-out ${
+        className={`flex flex-col items-center justify-center mt-4 space-y-3 transition-all duration-500 ease-in-out ${
           showQueue
             ? "blur-sm scale-95 pointer-events-none"
             : "blur-0 scale-100"
@@ -130,7 +132,7 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
       >
         <img
           src={currentSong.image}
-          alt={currentSong.title}
+          alt={`Cover art of ${currentSong.title} by ${currentSong.artist}`}
           className="w-70 h-70 sm:w-50 sm:h-50 md:w-60 md:h-60 xl:w-80 xl:h-80 2xl:w-[350px] 2xl:h-[350px] rounded-4xl shadow-2xl "
         />
 
@@ -160,10 +162,9 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
               currentSong.artist
             )}
           </div>
-          {/* </div> */}
         </div>
 
-        <div className="flex items-center justify-between mt-2">
+        <div className="flex items-center justify-between mt-">
           <p className="w-10 text-sm 2xl:w-16 2xl:text-xl font-montserrat-medium text-gray-700">
             {formatTime(currentTime)}
           </p>
@@ -186,10 +187,11 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
         </div>
 
         <div className="flex mt-3 text-xl xl:text-2xl 2xl:text-3xl">
-          <button className="text-gray-900 hover:text-black hover:scale-110 transition-all duration-500 ease-in-out cursor-pointer">
-            <FontAwesomeIcon icon={faBackward} />
+          <button aria-label="Previous">
+            <BackwardIcon className="w-8 h-8 hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer" />
           </button>
           <button
+          aria-label="Play/Pause"
             onClick={togglePlay}
             style={{
               borderRadius: isPlaying ? "19px" : "50%",
@@ -197,24 +199,21 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
             }}
             className="w-14 h-14 2xl:w-16 2xl:h-16 mx-10 flex items-center justify-center bg-black text-white hover:cursor-pointer"
           >
-            <FontAwesomeIcon
-              icon={isPlaying ? faPause : faPlay}
-              size="1x"
-              className="flex items-center justify-center"
-              style={{
-                paddingLeft: isPlaying ? "0px" : "2px",
-              }}
-            />
+            {isPlaying ? (
+              <PauseIcon className="w-7 h-7 xl:w-8 xl:h-8"/>
+            ) : (
+              <PlayIcon className="w-7 h-7 xl:w-8 xl:h-8 ml-0.5"/>
+            )}
           </button>
-          <button className="text-gray-900 hover:text-black hover:scale-110 transition-all duration-500 ease-in-out cursor-pointer">
-            <FontAwesomeIcon icon={faForward} />
+          <button aria-label="Next">
+            <ForwardIcon className="w-7 h-7 xl:w-8 xl:h-8 hover:text-black hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer"/>
           </button>
         </div>
 
         <ElasticSlider
           value={volume * 100}
-          leftIcon={<FontAwesomeIcon icon={faVolumeLow} />}
-          rightIcon={<FontAwesomeIcon icon={faVolumeHigh} />}
+          leftIcon={<SpeakerXMarkIcon className="w-5 h-5"/>}
+          rightIcon={<SpeakerWaveIcon className="w-5 h-5"/>}
           maxValue={100}
           isStepped
           stepSize={1}
@@ -225,27 +224,27 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
               navigator.vibrate(10);
             }
           }}
-          className="mt-6 2xl:scale-125 2xl:mt-10"
+          className="mt-6 2xl:scale-125 2xl:mt-7"
         />
 
-        <div className="flex mr-8">
+        <div className="flex mr-6 xl:mr-8">
           <button
             onClick={() => setShowQueue(true)}
-            className="text-black hover:scale-110 transition-all cursor-pointer ml-6 xl:ml-8"
+            className="text-black hover:scale-110 transition-transform cursor-pointer ml-6 xl:ml-8"
           >
-            <ListMusic />
+            <QueueListIcon className="w-7 h-7" />
           </button>
           <button
             onClick={() => currentSong && addSongToPlaylist("My Playlist", currentSong)}
-            className="text-black hover:scale-110 transition-all cursor-pointer ml-6 xl:ml-8"
+            className="text-black hover:scale-110 transition-transform cursor-pointer ml-6 xl:ml-8"
           >
-            <CirclePlus />
+            <PlusCircleIcon className="w-7 h-7" />
           </button>
           <button
             onClick={() => currentSong && addSongToPlaylist("My Favourite", currentSong)}
-            className="text-black hover:scale-110 transition-all cursor-pointer ml-6 xl:ml-8"
+            className="text-black hover:scale-110 transition-transform cursor-pointer ml-6 xl:ml-8"
           >
-            <Heart />
+            <HeartIcon className="w-7 h-7" />
           </button>
         </div>
       </motion.div>

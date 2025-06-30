@@ -1,19 +1,26 @@
 import { useSong } from "./context/SongContext";
 import { useState, useEffect, useRef } from "react";
-
 import {
-  faBackward,
-  faPlay,
-  faPause,
-  faForward,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  PlayIcon,
+  PauseIcon,
+  ForwardIcon,
+  BackwardIcon
+} from "@heroicons/react/24/solid";
 
-const BottomPlayer = ({onOpenFullPlayer}: {onOpenFullPlayer: () => void}) => {
+const formatTime = (time: number) => {
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60);
+  return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+};
+
+const BottomPlayer = ({
+  onOpenFullPlayer,
+}: {
+  onOpenFullPlayer: () => void;
+}) => {
   const {
     currentSong,
     showFullPlayer,
-    // setShowFullPlayer,
     isPlaying,
     setIsPlaying,
     currentTime,
@@ -27,16 +34,31 @@ const BottomPlayer = ({onOpenFullPlayer}: {onOpenFullPlayer: () => void}) => {
   const [isTitleOverlfowing, setIsTitleOverlflowing] = useState(false);
   const [isArtistsOverflowing, setIsArtistsOverlfowing] = useState(false);
 
+  // useEffect(() => {
+  //   if (!titleRefs.current || !artistRefs.current) return;
+  //   const newIsTitleOverflowing =
+  //     titleRefs.current.scrollWidth > titleRefs.current.clientWidth;
+
+  //   const newIsArtistsOverflowing =
+  //     artistRefs.current.scrollWidth > artistRefs.current.clientWidth;
+
+  //   setIsTitleOverlflowing(newIsTitleOverflowing);
+  //   setIsArtistsOverlfowing(newIsArtistsOverflowing);
+  // }, [currentSong]);
+
   useEffect(() => {
     if (!titleRefs.current || !artistRefs.current) return;
-    const newIsTitleOverflowing =
-      titleRefs.current.scrollWidth > titleRefs.current.clientWidth;
 
-    const newIsArtistsOverflowing =
-      artistRefs.current.scrollWidth > artistRefs.current.clientWidth;
+    const checkOverflow = () => {
+      setIsTitleOverlflowing(
+        titleRefs.current!.scrollWidth > titleRefs.current!.clientWidth
+      );
+      setIsArtistsOverlfowing(
+        artistRefs.current!.scrollWidth > artistRefs.current!.clientWidth
+      );
+    };
 
-    setIsTitleOverlflowing(newIsTitleOverflowing);
-    setIsArtistsOverlfowing(newIsArtistsOverflowing);
+    requestAnimationFrame(checkOverflow);
   }, [currentSong]);
 
   const togglePlay = () => {
@@ -58,14 +80,14 @@ const BottomPlayer = ({onOpenFullPlayer}: {onOpenFullPlayer: () => void}) => {
     }
   };
 
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
-  };
+  // const formatTime = (time: number) => {
+  //   const minutes = Math.floor(time / 60);
+  //   const seconds = Math.floor(time % 60);
+  //   return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+  // };
 
   useEffect(() => {
-    if(!currentSong || !("mediaSession" in navigator)) return;
+    if (!currentSong || !("mediaSession" in navigator)) return;
 
     navigator.mediaSession.metadata = new MediaMetadata({
       title: currentSong.title,
@@ -75,28 +97,26 @@ const BottomPlayer = ({onOpenFullPlayer}: {onOpenFullPlayer: () => void}) => {
           src: currentSong.image,
           sizes: "512x512",
           type: "image/jpeg",
-        }
-      ]
-    })
+        },
+      ],
+    });
 
     navigator.mediaSession.setActionHandler("play", () => {
       audioRef.current?.play();
       setIsPlaying(true);
-    })
+    });
 
     navigator.mediaSession.setActionHandler("pause", () => {
       audioRef.current?.pause();
       setIsPlaying(false);
-    })
+    });
+  }, [currentSong, audioRef, setIsPlaying]);
 
-
-  }, [currentSong, audioRef, setIsPlaying])
-
-  if (!currentSong || !currentSong?.url) return null;
+  if (!currentSong?.url) return null;
 
   return (
     <div
-      className={`fixed bottom-5 min-w-11/12 xl:mx-52 xl:left-52 xl:min-w-fit mx-4 md:left-0 md:mx-5 right-0 px-6 py-4 backdrop-blur-xl shadow-2xl border border-gray-300/50 rounded-3xl z-40 transition-all duration-1000 ease-in-out ${
+      className={`fixed bottom-5 min-w-11/12 xl:mx-52 xl:left-52 xl:min-w-fit mx-4 md:left-0 md:mx-5 right-0 px-6 py-4 backdrop-blur-md xl:backdrop-blur-xl shadow-2xl border border-gray-300/50 rounded-3xl z-40 transition-normal duration-700 ease-in-out ${
         showFullPlayer
           ? "opacity-0 translate-y-5 blur-sm scale-95 pointer-events-none"
           : "opacity-100 translate-y-0 blur-0 scale-100"
@@ -112,6 +132,7 @@ const BottomPlayer = ({onOpenFullPlayer}: {onOpenFullPlayer: () => void}) => {
               <img
                 src={currentSong.image}
                 alt={currentSong.title}
+                loading="lazy"
                 className="w-12 h-12 rounded-md object-cover"
               />
             )}
@@ -145,18 +166,22 @@ const BottomPlayer = ({onOpenFullPlayer}: {onOpenFullPlayer: () => void}) => {
             </div>
           </div>
 
-          <div className="flex items-center gap-6 md:pr-4">
-            <button className="text-gray-900 hover:text-black cursor-pointer text-xl">
-              <FontAwesomeIcon icon={faBackward} />
+          <div className="flex items-center gap-4 xl:gap-6 md:pr-4">
+            <button aria-label="Previous">
+              <BackwardIcon className="w-6 xl:w-8 text-gray-900 hover:text-black cursor-pointer" />
             </button>
             <button
+            aria-label="Play or Pause"
               onClick={togglePlay}
-              className="w-5 text-gray-900 hover:text-black cursor-pointer text-xl"
             >
-              <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
+              {isPlaying ? (
+                <PauseIcon className="w-6 xl:w-8 text-gray-900 hover:text-black cursor-pointer text-xl" />
+              ) : (
+                <PlayIcon className="w-6 xl:w-8 text-gray-900 hover:text-black cursor-pointer text-xl" />
+              )}
             </button>
-            <button className="text-gray-900 hover:text-black cursor-pointer text-xl">
-              <FontAwesomeIcon icon={faForward} />
+            <button aria-label="Next">
+              <ForwardIcon className="w-6 xl:w-8 text-gray-900 hover:text-black cursor-pointer text-xl" />
             </button>
           </div>
         </div>

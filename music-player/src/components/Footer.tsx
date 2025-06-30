@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faLinkedin,
-  faInstagram,
-  faGithub,
-} from "@fortawesome/free-brands-svg-icons";
+  FaLinkedin,
+  FaInstagram,
+  FaGithub,
+} from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -22,7 +22,7 @@ const Footer = () => {
             )
           }
         >
-          <FontAwesomeIcon icon={faLinkedin} size="2x" />
+          <FaLinkedin size={36} />
         </button>
 
         <button
@@ -31,14 +31,14 @@ const Footer = () => {
             window.open("https://www.instagram.com/iamayyan_/", "_blank")
           }
         >
-          <FontAwesomeIcon icon={faInstagram} size="2x" />
+          <FaInstagram size={36} />
         </button>
 
         <button
           className="sm:w-10 sm:h-10 transition-transform duration-300 hover:scale-110 hover:text-black cursor-pointer"
           onClick={() => window.open("https://github.com/Ayan-004", "_blank")}
         >
-          <FontAwesomeIcon icon={faGithub} size="2x" />
+          <FaGithub size={36} />
         </button>
       </div>
 

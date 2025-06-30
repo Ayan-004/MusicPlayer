@@ -78,7 +78,7 @@ function Home() {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row item-start gap-6 m-6">
+      <div className="flex flex-col lg:flex-row items-start gap-6 m-4 md:gap-14 xl:gap-16 md:m-6 xl:m-10">
         <div className="w-full lg:w-2/3">
           <Banner />
         </div>
@@ -91,7 +91,10 @@ function Home() {
       <CardSlider title="Top Artist" items={artists} loading={loading} />
       <CardSlider
         title="Top Global Artist"
-        artists={globalArtist}
+        artists={globalArtist.map((artist) => ({
+          ...artist,
+          isGlobal: true,
+        }))}
         loading={loadingGlobal}
       />
 

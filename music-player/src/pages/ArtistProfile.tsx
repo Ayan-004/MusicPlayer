@@ -53,7 +53,7 @@ function ArtistProfile() {
             title: decodeHTMLEntities(
               song.name || song.title || "Unknown title"
             ),
-            image: song.image?.[2]?.url || "",
+            image: song.image?.[2]?.url || song.image?.[0].url || "",
             artist:
               decodeHTMLEntities(
                 song.artists?.primary?.map((a: any) => a.name).join(",")
@@ -68,7 +68,6 @@ function ArtistProfile() {
         setSongs([]);
       })
       .finally(() => setLoading(false));
-    return;
   }, [artistName]);
 
   return (
@@ -97,14 +96,14 @@ function ArtistProfile() {
           </p>
         </div>
       ) : songs.length === 0 ? (
-        <p className="flex items-center justify-center md:w-2xl bg-[#efefef] font-montserrat-medium ml-3 mr-3 md:ml-72 p-10 rounded-4xl">
+        <p className="flex items-center justify-center bg-[#efefef] font-montserrat-medium m-3 md:m-6 p-10 rounded-4xl text-center">
           😕 Couldn't find songs by {artistName}. Try again later
         </p>
       ) : (
         <div className="flex flex-col gap-2 bg-[#efefef] p-6 rounded-4xl m-3 md:m-6 mb-56 md:mb-36">
           {songs.map((song, index) => (
             <AnimatedItem
-              key={index}
+              key={`${song.title}-${index}`}
               index={index}
               onClick={() =>
                 setCurrentSong({
@@ -118,11 +117,11 @@ function ArtistProfile() {
               {song.image?.trim() && (
                 <img
                   src={song.image}
-                  alt={song.title}
+                  alt={`Cover of ${song.title} by ${song.artist}`}
                   className="w-14 h-14 md:w-16 md:h-16 object-cover rounded-full"
                 />
               )}
-              <div className="flex flex-col min-w-0 max-w-xs md:max-w-md overflow-hidden">
+              <div className="flex flex-col min-w-0 max-w-md overflow-hidden">
                 <p className="text-sm md:text-md font-montserrat-medium truncate">
                   {song.title}
                 </p>
