@@ -40,7 +40,7 @@ function SongPreview() {
             entry["im:image"]?.[2]?.label ||
             entry["im:image"]?.[0]?.label ||
             ""
-          ).replace(/\/\d+x\d+bb/, "/500x500bb"),
+          ).replace(/\/\d+x\d+bb/, "/400x400bb"),
           previewUrl:
             entry.link?.find(
               (link: any) => link?.attributes?.type === "audio/x-m4a"
@@ -155,7 +155,7 @@ function SongPreview() {
               <div className="flex flex-col items-center">
                 <img
                   src={items.artworkUrl100}
-                  alt={items.trackName}
+                  alt={`Cover art of ${items.trackName} by ${items.artistName}`}
                   className="w-40 h-40 md:w-52 md:h-52 lg:w-44 lg:h-44 rounded-4xl shadow-2xl shadow-gray-700"
                   onError={(e) => {
                     e.currentTarget.src = "path/to/fallback-image.jpg";

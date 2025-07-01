@@ -11,16 +11,16 @@ const QueuePanel = ({ onClose }: Props) => {
   const { queue, removeFromQueue, setCurrentSong, setIsPlaying, clearQueue } =
     useSong();
 
-    const handleSongClick = (song: Song) => {
-      setCurrentSong(song);
-      setIsPlaying(true);
-      onClose();
-    }
+  const handleSongClick = (song: Song) => {
+    setCurrentSong(song);
+    setIsPlaying(true);
+    onClose();
+  };
 
-    const handleRemove = (e: React.MouseEvent, index: number) => {
-      e.stopPropagation();
-      removeFromQueue(index);
-    }
+  const handleRemove = (e: React.MouseEvent, index: number) => {
+    e.stopPropagation();
+    removeFromQueue(index);
+  };
 
   return (
     <motion.div
@@ -39,10 +39,11 @@ const QueuePanel = ({ onClose }: Props) => {
         </button>
         <h2 className="text-3xl font-calsans mr-6">Queue</h2>
         <button
+          aria-label="Close queue panel"
           onClick={onClose}
           className="text-3xl xl:text-4xl hover:cursor-pointer"
         >
-          <XCircleIcon className="w-8 h-8"/>
+          <XCircleIcon className="w-8 h-8" />
         </button>
       </div>
 
@@ -75,7 +76,7 @@ const QueuePanel = ({ onClose }: Props) => {
                 </div>
               </div>
               <button
-              aria-label={`Remove ${song.title} from queue`}
+                aria-label={`Remove ${song.title} from queue`}
                 onClick={(e) => handleRemove(e, index)}
                 className="text-xl cursor-pointer"
               >

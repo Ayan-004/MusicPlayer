@@ -9,11 +9,15 @@ import {
   SpeakerXMarkIcon,
 } from "@heroicons/react/24/solid";
 import ElasticSlider from "./ElasticSlider";
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense } from "react";
 import { useIsMobile } from "../hooks/IsMobile";
 import { motion, AnimatePresence, easeOut, easeInOut } from "framer-motion";
-import { } from "lucide-react";
-import { QueueListIcon, PlusCircleIcon, HeartIcon } from "@heroicons/react/24/outline"
+import {} from "lucide-react";
+import {
+  QueueListIcon,
+  PlusCircleIcon,
+  HeartIcon,
+} from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 const QueuePanel = lazy(() => import("./QueuePanel"));
 
@@ -23,7 +27,11 @@ type FullPagePlayerProps = {
   onClose: () => void;
 };
 
-const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProps) => {
+const FullPagePlayer = ({
+  showQueue,
+  setShowQueue,
+  onClose,
+}: FullPagePlayerProps) => {
   const {
     currentSong,
     isPlaying,
@@ -60,8 +68,12 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
   useEffect(() => {
     if (!titleRefs.current || !artistRefs.current) return;
 
-    setIsTitleOverflowing(titleRefs.current.scrollWidth > titleRefs.current.clientWidth);
-    setIsArtistsOverfowing(artistRefs.current.scrollWidth > artistRefs.current.clientWidth);
+    setIsTitleOverflowing(
+      titleRefs.current.scrollWidth > titleRefs.current.clientWidth
+    );
+    setIsArtistsOverfowing(
+      artistRefs.current.scrollWidth > artistRefs.current.clientWidth
+    );
   }, [currentSong?.title, currentSong?.artist]);
 
   const togglePlay = () => {
@@ -96,7 +108,6 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
       animate={{ opacity: 1, y: 0 }}
       exit={{
         y: exitY,
-        // translateY: exitY,
         opacity: 0,
         transition: { duration: 0.4, ease: easeInOut },
       }}
@@ -104,19 +115,16 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
       style={{ willChange: "tranform, opacity" }}
       className={`fixed top-0 min-w-full xl:min-w-min xl:left-[230px] right-0 bottom-0 xl:rounded-l-4xl backdrop-blur-xl xl:backdrop-blur-2xl text-black z-40 p-6 flex flex-col items-center justify-center overflow-hidden transition-all duration-500 ease-in-out`}
     >
-      <button
-        aria-label="Close player"
-        onClick={onClose}
-      >
+      <button aria-label="Close player" onClick={onClose}>
         <XCircleIcon className="absolute top-10 right-10 w-8 h-8 xl:w-12 xl:h-12 hover:cursor-pointer" />
       </button>
 
       <AnimatePresence>
         {showQueue && (
           <Suspense fallback={<div>Loading...</div>}>
-          <QueuePanel onClose={() => setShowQueue(false)} />
+            <QueuePanel onClose={() => setShowQueue(false)} />
           </Suspense>
-  )}
+        )}
       </AnimatePresence>
 
       <motion.div
@@ -191,7 +199,7 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
             <BackwardIcon className="w-8 h-8 hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer" />
           </button>
           <button
-          aria-label="Play/Pause"
+            aria-label="Play/Pause"
             onClick={togglePlay}
             style={{
               borderRadius: isPlaying ? "19px" : "50%",
@@ -200,20 +208,20 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
             className="w-14 h-14 2xl:w-16 2xl:h-16 mx-10 flex items-center justify-center bg-black text-white hover:cursor-pointer"
           >
             {isPlaying ? (
-              <PauseIcon className="w-7 h-7 xl:w-8 xl:h-8"/>
+              <PauseIcon className="w-7 h-7 xl:w-8 xl:h-8" />
             ) : (
-              <PlayIcon className="w-7 h-7 xl:w-8 xl:h-8 ml-0.5"/>
+              <PlayIcon className="w-7 h-7 xl:w-8 xl:h-8 ml-0.5" />
             )}
           </button>
           <button aria-label="Next">
-            <ForwardIcon className="w-7 h-7 xl:w-8 xl:h-8 hover:text-black hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer"/>
+            <ForwardIcon className="w-7 h-7 xl:w-8 xl:h-8 hover:text-black hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer" />
           </button>
         </div>
 
         <ElasticSlider
           value={volume * 100}
-          leftIcon={<SpeakerXMarkIcon className="w-5 h-5"/>}
-          rightIcon={<SpeakerWaveIcon className="w-5 h-5"/>}
+          leftIcon={<SpeakerXMarkIcon className="w-5 h-5" />}
+          rightIcon={<SpeakerWaveIcon className="w-5 h-5" />}
           maxValue={100}
           isStepped
           stepSize={1}
@@ -229,19 +237,26 @@ const FullPagePlayer = ({ showQueue, setShowQueue, onClose }: FullPagePlayerProp
 
         <div className="flex mr-6 xl:mr-8">
           <button
+            aria-label="Open queue panel"
             onClick={() => setShowQueue(true)}
             className="text-black hover:scale-110 transition-transform cursor-pointer ml-6 xl:ml-8"
           >
             <QueueListIcon className="w-7 h-7" />
           </button>
           <button
-            onClick={() => currentSong && addSongToPlaylist("My Playlist", currentSong)}
+            aria-label="Add song to playlist"
+            onClick={() =>
+              currentSong && addSongToPlaylist("My Playlist", currentSong)
+            }
             className="text-black hover:scale-110 transition-transform cursor-pointer ml-6 xl:ml-8"
           >
             <PlusCircleIcon className="w-7 h-7" />
           </button>
           <button
-            onClick={() => currentSong && addSongToPlaylist("My Favourite", currentSong)}
+            aria-label="Add song to favourite"
+            onClick={() =>
+              currentSong && addSongToPlaylist("My Favourite", currentSong)
+            }
             className="text-black hover:scale-110 transition-transform cursor-pointer ml-6 xl:ml-8"
           >
             <HeartIcon className="w-7 h-7" />
