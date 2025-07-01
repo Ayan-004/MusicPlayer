@@ -1,8 +1,4 @@
-import {
-  FaLinkedin,
-  FaInstagram,
-  FaGithub,
-} from "react-icons/fa";
+import { FaLinkedin, FaInstagram, FaGithub } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -13,6 +9,7 @@ const Footer = () => {
 
       <div className="flex items-center justify-center space-x-6">
         <button
+          aria-label="Open linkedin"
           className="w-8 h-8 sm:w-10 sm:h-10 transition-transform duration-300 hover:scale-110 hover:text-black cursor-pointer"
           onClick={() =>
             window.open(
@@ -25,6 +22,7 @@ const Footer = () => {
         </button>
 
         <button
+          aria-label="Open instagram"
           className="w-8 h-8 sm:w-10 sm:h-10 transition-transform duration-300 hover:scale-110 hover:text-black cursor-pointer"
           onClick={() =>
             window.open("https://www.instagram.com/iamayyan_/", "_blank")
@@ -34,6 +32,7 @@ const Footer = () => {
         </button>
 
         <button
+          aria-label="Open github"
           className="sm:w-10 sm:h-10 transition-transform duration-300 hover:scale-110 hover:text-black cursor-pointer"
           onClick={() => window.open("https://github.com/Ayan-004", "_blank")}
         >
