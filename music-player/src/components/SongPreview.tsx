@@ -4,6 +4,7 @@ import "swiper/swiper-bundle.css";
 import { Navigation } from "swiper/modules";
 import axios from "axios";
 import { SpeakerXMarkIcon, SpeakerWaveIcon } from "@heroicons/react/24/solid";
+import ColorThief from "colorthief";
 
 type Track = {
   trackName: string;
@@ -23,6 +24,10 @@ function SongPreview() {
   const artistRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [overflowingTitles, setOverflowingTitles] = useState<boolean[]>([]);
   const [overflowingArtists, setOverflowingArtists] = useState<boolean[]>([]);
+  const [shadowColors, setShadowColors] = useState<string[]>(
+    Array(track.length).fill("rgba(0,0,0,0.9")
+  );
+  const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
 
   useEffect(() => {
     const fetchTracks = async () => {
@@ -47,6 +52,7 @@ function SongPreview() {
             )?.attributes?.href || "",
         }));
         setTrack(parsedSongs);
+        setShadowColors(Array(parsedSongs, length).fill("rgba(0,0,0,0,9)"));
 
         setIsLoading(false);
       } catch (error) {
@@ -68,6 +74,38 @@ function SongPreview() {
 
     setOverflowingTitles(newOverflowingTitles);
     setOverflowingArtists(newOverflowingArtists);
+  }, [track]);
+
+  useEffect(() => {
+    if (track.length === 0) return;
+
+    const colorThief = new ColorThief();
+
+    track.forEach((_, index) => {
+      const img = imgRefs.current[index];
+      if (img) {
+        if (img.complete) {
+          getColor(index, img);
+        } else {
+          img.onload = () => getColor(index, img);
+        }
+      }
+    });
+
+    function getColor(index: number, img: HTMLImageElement) {
+      try {
+        const result = colorThief.getColor(img);
+        const rgba = `rgba(${result[0]}, ${result[1]}, ${result[2]}, 0.9)`;
+
+        setShadowColors((prev) => {
+          const newColors = [...prev];
+          newColors[index] = rgba;
+          return newColors;
+        });
+      } catch (error) {
+        console.error("Could not get color", error);
+      }
+    }
   }, [track]);
 
   const handleMuteToggle = () => {
@@ -123,7 +161,7 @@ function SongPreview() {
 
   return (
     <div className="song-item w-full max-w-md bg-[#efefef] p-6 rounded-4xl">
-      <h2 className="text-2xl md:text-2xl lg:text-3xl font-calsans mb-4">
+      <h2 className="text-2xl md:text-2xl lg:text-3xl font-calsans">
         Top Tracks
       </h2>
 
@@ -153,14 +191,21 @@ function SongPreview() {
           {track.map((items, index) => (
             <SwiperSlide key={items.trackName}>
               <div className="flex flex-col items-center">
-                <img
-                  src={items.artworkUrl100}
-                  alt={`Cover art of ${items.trackName} by ${items.artistName}`}
-                  className="w-40 h-40 md:w-52 md:h-52 lg:w-44 lg:h-44 rounded-4xl shadow-2xl shadow-gray-700"
-                  onError={(e) => {
-                    e.currentTarget.src = "path/to/fallback-image.jpg";
-                  }}
-                />
+                <div className="relative pt-12 overflow-visible">
+                  <img
+                    ref={(el) => {
+                      imgRefs.current[index] = el;
+                    }}
+                    src={items.artworkUrl100}
+                    alt={`Cover art of ${items.trackName} by ${items.artistName}`}
+                    className="w-40 h-40 md:w-52 md:h-52 lg:w-44 lg:h-44 rounded-4xl shadow-2xl"
+                    style={{ boxShadow: `0 10px 40px ${shadowColors[index]}` }}
+                    crossOrigin="anonymous"
+                    onError={(e) => {
+                      e.currentTarget.src = "path/to/fallback-image.jpg";
+                    }}
+                  />
+                </div>
                 <div
                   ref={(el) => {
                     titleRefs.current[index] = el;
