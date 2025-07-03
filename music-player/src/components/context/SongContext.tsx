@@ -219,15 +219,6 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [currentSong]);
 
-  // useEffect(() => {
-  //   const stored = localStorage.getItem("currentSong");
-  //   if (stored && !currentSong) {
-  //     const parsedSong = JSON.parse(stored);
-  //     setCurrentSong(parsedSong);
-  //     previousSongUrl.current = parsedSong.url;
-  //   }
-  // }, []);
-
   return (
     <SongContext.Provider
       value={{
