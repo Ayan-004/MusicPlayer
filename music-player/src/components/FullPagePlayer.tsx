@@ -174,7 +174,7 @@ const FullPagePlayer = ({
           crossOrigin="anonymous"
           alt={`Cover art of ${currentSong.title} by ${currentSong.artist}`}
           className="w-70 h-70 sm:w-50 sm:h-50 md:w-60 md:h-60 xl:w-80 xl:h-80 2xl:w-[350px] 2xl:h-[350px] rounded-4xl shadow-2xl "
-          style={{ boxShadow: `0 16px 30px ${shadowColors}` }}
+          style={{ boxShadow: `0 16px 40px ${shadowColors}` }}
         />
 
         <div className="flex flex-col min-w-0 max-w-[200px] md:max-w-[330px] overflow-hidden hover:cursor-pointer">
