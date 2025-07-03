@@ -20,6 +20,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 const QueuePanel = lazy(() => import("./QueuePanel"));
+import ColorThief from "colorthief";
 
 type FullPagePlayerProps = {
   showQueue: boolean;
@@ -52,6 +53,9 @@ const FullPagePlayer = ({
   const artistRefs = useRef<HTMLDivElement | null>(null);
   const [isTitleOverfowing, setIsTitleOverflowing] = useState(false);
   const [isArtistsOverflowing, setIsArtistsOverfowing] = useState(false);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const [shadowColors, setShadowColors] = useState("rgba(0,0,0,0.9)")
+  
 
   useEffect(() => {
     if (currentSong && audioRef.current) {
@@ -75,6 +79,32 @@ const FullPagePlayer = ({
       artistRefs.current.scrollWidth > artistRefs.current.clientWidth
     );
   }, [currentSong?.title, currentSong?.artist]);
+
+  useEffect(() => {
+      if (!currentSong || !currentSong.image) return;
+  
+      const img = imgRef.current;
+      if (!img) return;
+
+      const colorThief = new ColorThief();
+
+      function getColor() {
+        try {
+          const result = colorThief.getColor(img!);
+
+          const rgba = `rgba(${result[0]}, ${result[1]}, ${result[2]}, 0.9)`;
+          setShadowColors(rgba);
+        } catch (err) {
+          console.error("Could not get color", err);
+        }
+      }
+
+      if (img.complete) {
+        getColor();
+      } else {
+        img.onload = () => getColor();
+      }
+    }, [currentSong]);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -139,9 +169,12 @@ const FullPagePlayer = ({
         } `}
       >
         <img
+          ref={imgRef}
           src={currentSong.image}
+          crossOrigin="anonymous"
           alt={`Cover art of ${currentSong.title} by ${currentSong.artist}`}
           className="w-70 h-70 sm:w-50 sm:h-50 md:w-60 md:h-60 xl:w-80 xl:h-80 2xl:w-[350px] 2xl:h-[350px] rounded-4xl shadow-2xl "
+          style={{ boxShadow: `0 16px 30px ${shadowColors}` }}
         />
 
         <div className="flex flex-col min-w-0 max-w-[200px] md:max-w-[330px] overflow-hidden hover:cursor-pointer">
