@@ -1,7 +1,7 @@
 {
     "name": "Audizi",
     "short_name": "Audizi",
-    "start_url": "/",
+    "start_url": "/home",
     "display": "standalone",
     "background": "#ffffff",
     "theme_color": "#ffffff",
